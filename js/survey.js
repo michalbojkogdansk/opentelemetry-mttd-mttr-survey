@@ -241,11 +241,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (state.otelStatus === 'yes') {
             otelUsersSection.style.display = 'block';
             nonOtelUsersSection.style.display = 'none';
-            otelUsabilitySection.style.display = 'block';
+            // Sekcja V będzie pokazywana przez nawigację (klasa active)
+            otelUsabilitySection.classList.add('otel-enabled');
         } else {
             otelUsersSection.style.display = 'none';
             nonOtelUsersSection.style.display = 'block';
-            otelUsabilitySection.style.display = 'none';
+            // Sekcja V będzie pomijana w nawigacji
+            otelUsabilitySection.classList.remove('otel-enabled');
         }
 
         updateVisibleSections();
@@ -306,8 +308,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showSection(sectionNum) {
+        // Ukryj wszystkie sekcje
         sections.forEach(section => {
             section.classList.remove('active');
+            // Nie zmieniaj display dla sekcji warunkowych (obsługiwanych osobno)
+            if (!section.id || (section.id !== 'otelUsersSection' && section.id !== 'nonOtelUsersSection')) {
+                section.style.display = '';  // Reset inline style, pozwól CSS działać
+            }
         });
 
         const targetSection = document.querySelector(`[data-section="${sectionNum}"]`);
