@@ -1,7 +1,15 @@
 /**
  * OpenTelemetry Survey - JavaScript Logic
- * Handles conditional logic, validation, navigation, and form submission
+ * Handles token validation, conditional logic, navigation, and form submission
  */
+
+// ============================================
+// Configuration - UPDATE THIS AFTER DEPLOYING CLOUDFLARE WORKER
+// ============================================
+const CONFIG = {
+    WORKER_URL: 'https://wild-block-e91fsurvey-api.michal-bojko-gdansk.workers.dev',
+    DEBUG: false
+};
 
 document.addEventListener('DOMContentLoaded', function() {
     // ============================================
@@ -10,15 +18,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const state = {
         currentSection: 1,
         totalSections: 7,
-        startTime: new Date(),
-        otelStatus: null, // 'yes' or 'no'
+        startTime: null,
+        otelStatus: null,
         shortExperience: false,
-        collectsMttdMttr: true
+        collectsMttdMttr: true,
+        token: null,
+        tokenValidated: false
     };
 
     // ============================================
     // DOM Elements
     // ============================================
+    const tokenScreen = document.getElementById('tokenScreen');
+    const surveyContainer = document.getElementById('surveyContainer');
+    const tokenInput = document.getElementById('tokenInput');
+    const validateTokenBtn = document.getElementById('validateTokenBtn');
+    const tokenError = document.getElementById('tokenError');
+    
     const form = document.getElementById('surveyForm');
     const sections = document.querySelectorAll('.survey-section');
     const progressFill = document.getElementById('progressFill');
@@ -29,10 +45,106 @@ document.addEventListener('DOMContentLoaded', function() {
     const thankYouScreen = document.getElementById('thankYouScreen');
 
     // ============================================
-    // Initialization
+    // Token Validation
     // ============================================
-    init();
+    initTokenValidation();
 
+    function initTokenValidation() {
+        // Check for token in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlToken = urlParams.get('token');
+        
+        if (urlToken) {
+            tokenInput.value = urlToken;
+            validateToken(urlToken);
+        }
+
+        // Token validation button
+        validateTokenBtn.addEventListener('click', () => {
+            const token = tokenInput.value.trim().toUpperCase();
+            if (token) {
+                validateToken(token);
+            } else {
+                showTokenError('Wprowadź token');
+            }
+        });
+
+        // Enter key in token input
+        tokenInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                validateTokenBtn.click();
+            }
+        });
+    }
+
+    async function validateToken(token) {
+        showTokenLoading(true);
+        hideTokenError();
+
+        try {
+            const response = await fetch(`${CONFIG.WORKER_URL}/validate?token=${encodeURIComponent(token)}`);
+            const data = await response.json();
+
+            if (data.valid) {
+                state.token = token;
+                state.tokenValidated = true;
+                showSurvey();
+            } else {
+                showTokenError(getTokenErrorMessage(data.error));
+            }
+        } catch (error) {
+            console.error('Token validation error:', error);
+            showTokenError('Błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.');
+        } finally {
+            showTokenLoading(false);
+        }
+    }
+
+    function getTokenErrorMessage(error) {
+        const messages = {
+            'Token required': 'Wprowadź token',
+            'Invalid token': 'Nieprawidłowy token. Sprawdź poprawność i spróbuj ponownie.',
+            'Token already used': 'Ten token został już wykorzystany. Każdy token może być użyty tylko raz.'
+        };
+        return messages[error] || 'Wystąpił błąd. Spróbuj ponownie.';
+    }
+
+    function showTokenError(message) {
+        tokenError.textContent = message;
+        tokenError.classList.add('show');
+    }
+
+    function hideTokenError() {
+        tokenError.classList.remove('show');
+    }
+
+    function showTokenLoading(loading) {
+        if (loading) {
+            validateTokenBtn.disabled = true;
+            validateTokenBtn.innerHTML = '<span class="token-loading"></span>';
+        } else {
+            validateTokenBtn.disabled = false;
+            validateTokenBtn.textContent = 'Weryfikuj';
+        }
+    }
+
+    function showSurvey() {
+        tokenScreen.style.display = 'none';
+        surveyContainer.style.display = 'block';
+        state.startTime = new Date();
+        init();
+        
+        // Clean URL (remove token parameter)
+        if (window.history.replaceState) {
+            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+    }
+
+    // ============================================
+    // Survey Initialization
+    // ============================================
     function init() {
         setupEventListeners();
         setupConditionalLogic();
@@ -97,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Conditional Logic
     // ============================================
     function setupConditionalLogic() {
-        // Initial state check
         const otelStatusValue = document.querySelector('input[name="q7_otel_status"]:checked');
         if (otelStatusValue) {
             handleOtelStatusChange.call(otelStatusValue);
@@ -108,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const value = this.value;
         state.shortExperience = (value === 'less_than_6m');
         
-        // Show info box for short experience
         const infoBox = document.getElementById('shortExperienceInfo');
         if (infoBox) {
             infoBox.style.display = state.shortExperience ? 'flex' : 'none';
@@ -120,12 +230,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const otelYesValues = ['full', 'partial', 'in_progress'];
         state.otelStatus = otelYesValues.includes(value) ? 'yes' : 'no';
 
-        // Show/hide conditional questions in Section 2
         document.querySelectorAll('[data-show-if="otel_yes"]').forEach(el => {
             el.style.display = state.otelStatus === 'yes' ? 'block' : 'none';
         });
 
-        // Show/hide OTel users section in Section 4
         const otelUsersSection = document.getElementById('otelUsersSection');
         const nonOtelUsersSection = document.getElementById('nonOtelUsersSection');
         const otelUsabilitySection = document.getElementById('otelUsabilitySection');
@@ -140,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
             otelUsabilitySection.style.display = 'none';
         }
 
-        // Update visible sections based on OTel status
         updateVisibleSections();
     }
 
@@ -184,7 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Skip Section 5 if OTel not used
         let targetSection = newSection;
         if (state.otelStatus === 'no') {
             if (direction > 0 && newSection === 5) {
@@ -200,23 +306,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showSection(sectionNum) {
-        // Hide all sections
         sections.forEach(section => {
             section.classList.remove('active');
         });
 
-        // Show target section
         const targetSection = document.querySelector(`[data-section="${sectionNum}"]`);
         if (targetSection) {
             targetSection.classList.add('active');
             state.currentSection = sectionNum;
         }
 
-        // Update navigation buttons
         updateNavigationButtons();
         updateProgress();
 
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -242,7 +344,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getEffectiveTotalSections() {
-        // If OTel not used, skip section 5
         return state.otelStatus === 'no' ? state.totalSections - 1 : state.totalSections;
     }
 
@@ -261,7 +362,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let firstInvalid = null;
 
         requiredInputs.forEach(input => {
-            // Skip hidden inputs
             if (!isVisible(input)) return;
 
             const inputValid = validateInput(input);
@@ -271,7 +371,6 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = isValid && inputValid;
         });
 
-        // Also validate checkbox groups that need at least one selection
         const checkboxGroups = currentSectionEl.querySelectorAll('.checkbox-grid[data-min], .checkbox-grid');
         checkboxGroups.forEach(group => {
             if (!isVisible(group)) return;
@@ -279,7 +378,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = group.querySelectorAll('input[type="checkbox"]');
             const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
             
-            // Check if this is a required group (Q6 tools)
             const question = group.closest('.question');
             if (question && question.querySelector('.required')) {
                 if (!anyChecked) {
@@ -343,7 +441,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showValidationMessage(element) {
-        // Remove existing messages
         document.querySelectorAll('.validation-message').forEach(el => el.remove());
         
         const message = document.createElement('div');
@@ -415,13 +512,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.remove('drag-over');
             });
 
-            // Touch support for mobile
             item.addEventListener('touchstart', handleTouchStart, { passive: true });
             item.addEventListener('touchmove', handleTouchMove, { passive: false });
             item.addEventListener('touchend', handleTouchEnd);
         });
 
-        // Initial update
         updateRankingPositions();
     }
 
@@ -436,14 +531,12 @@ document.addEventListener('DOMContentLoaded', function() {
             ranking.push(item.dataset.value);
         });
 
-        // Update hidden input
         const rankingInput = document.getElementById('q18RankingInput');
         if (rankingInput) {
             rankingInput.value = ranking.join(',');
         }
     }
 
-    // Touch handlers for mobile ranking
     let touchStartY = 0;
     let touchCurrentItem = null;
 
@@ -513,7 +606,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Manual mapping for specific textareas
         setupCharCounter('q22_adoption_conditions', 'q22CharCount');
         setupCharCounter('q32_biggest_benefit', 'q32CharCount');
         setupCharCounter('q33_biggest_challenge', 'q33CharCount');
@@ -554,7 +646,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showLimitMessage(group, max) {
-        // Remove existing messages
         group.querySelectorAll('.limit-message').forEach(el => el.remove());
         
         const message = document.createElement('div');
@@ -576,12 +667,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     // Form Submission
     // ============================================
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         if (!validateCurrentSection()) {
             return;
         }
+
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="token-loading"></span> Wysyłanie...';
 
         // Collect form data
         const formData = new FormData(form);
@@ -603,16 +698,40 @@ document.addEventListener('DOMContentLoaded', function() {
         data._metadata = {
             completionTime: calculateCompletionTime(),
             timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
             respondentType: classifyRespondent(data.q1_experience),
             otelStatus: state.otelStatus
         };
 
-        // Save to localStorage as backup
-        saveToLocalStorage(data);
+        // Submit to Cloudflare Worker
+        try {
+            const response = await fetch(`${CONFIG.WORKER_URL}/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: state.token,
+                    responses: data
+                })
+            });
 
-        // Send to backend (Google Sheets, etc.)
-        submitToBackend(data);
+            const result = await response.json();
+
+            if (result.success) {
+                showThankYou(data);
+            } else {
+                throw new Error(result.error || 'Submission failed');
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            
+            // Save to localStorage as backup
+            saveToLocalStorage(data);
+            
+            // Show error but still show thank you (data is saved locally)
+            alert('Wystąpił problem z wysłaniem odpowiedzi. Twoje dane zostały zapisane lokalnie. Skontaktuj się z administratorem ankiety.');
+            showThankYou(data);
+        }
     }
 
     function calculateCompletionTime() {
@@ -631,32 +750,21 @@ document.addEventListener('DOMContentLoaded', function() {
     function saveToLocalStorage(data) {
         try {
             const responses = JSON.parse(localStorage.getItem('survey_responses') || '[]');
-            responses.push(data);
+            responses.push({
+                ...data,
+                _backup: true,
+                _token: state.token
+            });
             localStorage.setItem('survey_responses', JSON.stringify(responses));
         } catch (e) {
             console.error('Failed to save to localStorage:', e);
         }
     }
 
-    function submitToBackend(data) {
-        // Option 1: Google Forms
-        // submitToGoogleForms(data);
-
-        // Option 2: Google Sheets via Apps Script
-        // submitToGoogleSheets(data);
-
-        // Option 3: Formspree
-        // submitToFormspree(data);
-
-        // For now, just show thank you screen
-        showThankYou(data);
-    }
-
     function showThankYou(data) {
         form.style.display = 'none';
         thankYouScreen.style.display = 'block';
 
-        // Update stats
         document.getElementById('completionTime').textContent = data._metadata.completionTime;
         
         const answeredCount = Object.keys(data).filter(key => 
@@ -664,100 +772,10 @@ document.addEventListener('DOMContentLoaded', function() {
         ).length;
         document.getElementById('answeredQuestions').textContent = answeredCount;
 
-        // Hide progress
         document.querySelector('.progress-container').style.display = 'none';
 
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    // ============================================
-    // Backend Integration Functions (uncomment as needed)
-    // ============================================
-
-    /*
-    // Google Forms submission
-    function submitToGoogleForms(data) {
-        const GOOGLE_FORM_URL = 'YOUR_GOOGLE_FORM_URL';
-        const formBody = new URLSearchParams();
-        
-        // Map your field names to Google Form entry IDs
-        const fieldMapping = {
-            'q1_experience': 'entry.123456789',
-            // ... add all mappings
-        };
-
-        Object.keys(fieldMapping).forEach(key => {
-            if (data[key]) {
-                formBody.append(fieldMapping[key], data[key]);
-            }
-        });
-
-        fetch(GOOGLE_FORM_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formBody
-        }).then(() => {
-            showThankYou(data);
-        }).catch(error => {
-            console.error('Submission error:', error);
-            showThankYou(data); // Still show thank you
-        });
-    }
-
-    // Google Sheets via Apps Script
-    function submitToGoogleSheets(data) {
-        const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
-        
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        }).then(() => {
-            showThankYou(data);
-        }).catch(error => {
-            console.error('Submission error:', error);
-            showThankYou(data);
-        });
-    }
-
-    // Formspree submission
-    function submitToFormspree(data) {
-        const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID';
-        
-        fetch(FORMSPREE_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        }).then(response => {
-            if (response.ok) {
-                showThankYou(data);
-            }
-        }).catch(error => {
-            console.error('Submission error:', error);
-            showThankYou(data);
-        });
-    }
-    */
-
-    // ============================================
-    // Utility: Export responses (for testing)
-    // ============================================
-    window.exportResponses = function() {
-        const responses = JSON.parse(localStorage.getItem('survey_responses') || '[]');
-        const blob = new Blob([JSON.stringify(responses, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `survey_responses_${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-    };
 
     // ============================================
     // CSS for validation (add dynamically)
