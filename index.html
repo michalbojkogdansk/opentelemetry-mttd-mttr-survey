@@ -9,7 +9,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="survey-container">
+    <!-- Token Validation Screen -->
+    <div id="tokenScreen" class="token-screen">
+        <div class="token-container">
+            <div class="token-icon">🔐</div>
+            <h2>Weryfikacja dostępu</h2>
+            <p>Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.</p>
+            <div class="token-input-group">
+                <input type="text" id="tokenInput" placeholder="Wprowadź token (np. OTEL-2026-XXXXXX)" autocomplete="off">
+                <button type="button" id="validateTokenBtn">Weryfikuj</button>
+            </div>
+            <div id="tokenError" class="token-error"></div>
+            <div class="token-help">
+                <p>Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="survey-container" id="surveyContainer" style="display: none;">
         <!-- Header -->
         <header class="survey-header">
             <div class="logo">
@@ -18,7 +35,7 @@
                 </svg>
             </div>
             <h1>Badanie: Wpływ OpenTelemetry na MTTD i MTTR</h1>
-            <p class="subtitle">Czas wypełnienia: ~6-8 min</p>
+            <p class="subtitle">Badanie naukowe | Czas wypełnienia: ~6-8 min</p>
         </header>
 
         <!-- Progress Bar -->
@@ -1362,7 +1379,7 @@
 
         <!-- Footer -->
         <footer class="survey-footer">
-            <p>Badanie naukowe | 2026</p>
+            <p>Badanie realizowane w ramach pracy magisterskiej | 2026</p>
             <p class="privacy-note">
                 🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.
             </p>
