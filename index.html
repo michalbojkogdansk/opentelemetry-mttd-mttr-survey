@@ -35,6 +35,7 @@
                 </svg>
             </div>
             <h1>Badanie: Wpływ OpenTelemetry na MTTD i MTTR</h1>
+            <p class="subtitle">MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Resolve (średni czas rozwiązania incydentu)</p>
             <p class="subtitle">Badanie naukowe | Czas wypełnienia: ~6-8 min</p>
         </header>
 
@@ -345,6 +346,7 @@
                     <label class="question-label">
                         <span class="question-number">7.</span>
                         Czy w Twojej organizacji wdrożono OpenTelemetry (OTel)?
+                        <span class="hint">(przez wdrożenie rozumiemy użycie SDK, Collectora lub auto-instrumentacji OTel w co najmniej jednym środowisku)</span>
                         <span class="required">*</span>
                     </label>
                     <div class="options-list otel-status">
@@ -475,7 +477,7 @@
                     <div class="options-list">
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="automatic" required>
-                            <span>Automatycznie – system ticketowy lub narzędzie ITSM</span>
+                            <span>Automatycznie – system ticketowy lub narzędzie ITSM (IT Service Management, np. Jira, ServiceNow)</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="semi_auto">
