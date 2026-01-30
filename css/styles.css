@@ -1120,3 +1120,49 @@ input[type="email"]:focus {
         padding: 40px 25px;
     }
 }
+
+/* Info Box - MTTR Definition */
+.info-box {
+    display: flex;
+    gap: 16px;
+    background: linear-gradient(135deg, #e8f4fd 0%, #f0f7ff 100%);
+    border: 1px solid #b8d4ed;
+    border-left: 4px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+}
+
+.info-box .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.info-box .info-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.info-box .info-content strong {
+    color: var(--primary-color);
+}
+
+.info-box .info-content ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.info-box .info-content li {
+    margin-bottom: 6px;
+}
+
+.info-box.mttr-definition {
+    background: linear-gradient(135deg, #fff8e6 0%, #fffdf5 100%);
+    border-color: #f0d87a;
+    border-left-color: #e6b800;
+}
+
+.info-box.mttr-definition .info-content strong {
+    color: #b38600;
+}
