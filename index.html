@@ -35,7 +35,7 @@
                 </svg>
             </div>
             <h1>Badanie: Wpływ OpenTelemetry na MTTD i MTTR</h1>
-            <p class="subtitle">MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Resolve (średni czas rozwiązania incydentu)</p>
+            <p class="subtitle">MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)</p>
             <p class="subtitle">Badanie naukowe | Czas wypełnienia: ~6-8 min</p>
         </header>
 
@@ -467,6 +467,19 @@
                     <h2>MTTD i MTTR – samoocena</h2>
                 </div>
 
+                <div class="info-box mttr-definition">
+                    <div class="info-icon">ℹ️</div>
+                    <div class="info-content">
+                        <strong>Uwaga dotycząca MTTR:</strong> Akronim MTTR ma trzy możliwe interpretacje:
+                        <ul>
+                            <li><strong>Mean Time To Repair</strong> – czas samej naprawy (bez diagnostyki)</li>
+                            <li><strong>Mean Time To Recovery</strong> – od wykrycia do pełnego przywrócenia usługi</li>
+                            <li><strong>Mean Time To Resolve</strong> – cały cykl życia incydentu (włącznie z post-mortem)</li>
+                        </ul>
+                        <strong>W tym badaniu stosujemy definicję Recovery</strong> – czyli czas od wykrycia incydentu do pełnego przywrócenia usługi do stanu operacyjnego. Ta interpretacja bezpośrednio przekłada się na czas niedostępności odczuwany przez użytkowników.
+                    </div>
+                </div>
+
                 <!-- Pytanie 10 -->
                 <div class="question" data-question="10">
                     <label class="question-label">
@@ -524,7 +537,7 @@
                     <div class="question" data-question="12">
                         <label class="question-label">
                             <span class="question-number">12.</span>
-                            Jaki był średni czas rozwiązania incydentu (MTTR) w ciągu ostatnich 6 miesięcy?
+                            Jaki był średni czas przywrócenia usługi (MTTR) w ciągu ostatnich 6 miesięcy?
                             <span class="hint">Podaj wartość w minutach</span>
                         </label>
                         <div class="number-input-wrapper">
@@ -657,7 +670,7 @@
                     <div class="question" data-question="16">
                         <label class="question-label">
                             <span class="question-number">16.</span>
-                            Jak zmieniło się MTTR (Mean Time To Resolve) po wdrożeniu OpenTelemetry?
+                            Jak zmieniło się MTTR (Mean Time To Recovery) po wdrożeniu OpenTelemetry?
                             <span class="required">*</span>
                         </label>
                         <div class="likert-scale">
