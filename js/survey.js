@@ -54,6 +54,7 @@ function translatePage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Survey JS loaded');
     // ==========================================
     // Language Selection
     // ==========================================
@@ -61,6 +62,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const langPLBtn = document.getElementById('langPL');
     const langENBtn = document.getElementById('langEN');
     const tokenScreen = document.getElementById('tokenScreen');
+    
+    console.log('🔍 Found elements:', {
+        langScreen: !!langScreen,
+        langPLBtn: !!langPLBtn,
+        langENBtn: !!langENBtn,
+        tokenScreen: !!tokenScreen
+    });
     
     // Check URL for language parameter
     const urlParams = new URLSearchParams(window.location.search);
@@ -77,17 +85,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Language button handlers
     if (langPLBtn) {
+        console.log('✅ Adding click handler to langPL');
         langPLBtn.addEventListener('click', function() {
+            console.log('🇵🇱 Polski clicked!');
             setLanguage('pl');
             showTokenScreen();
         });
+    } else {
+        console.log('❌ langPL button not found!');
     }
     
     if (langENBtn) {
+        console.log('✅ Adding click handler to langEN');
         langENBtn.addEventListener('click', function() {
+            console.log('🇬🇧 English clicked!');
             setLanguage('en');
             showTokenScreen();
         });
+    } else {
+        console.log('❌ langEN button not found!');
     }
     
     function showTokenScreen() {
