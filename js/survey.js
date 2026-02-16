@@ -1,20 +1,111 @@
 /**
  * OpenTelemetry Survey - JavaScript Logic
- * Handles token validation, conditional logic, navigation, and form submission
+ * Handles language selection, token validation, conditional logic, navigation, and form submission
  */
 
-// ============================================
-// Configuration - UPDATE THIS AFTER DEPLOYING CLOUDFLARE WORKER
-// ============================================
+// ==========================================
+// Configuration
+// ==========================================
 const CONFIG = {
     WORKER_URL: 'https://wild-block-e91fsurvey-api.michal-bojko-gdansk.workers.dev',
     DEBUG: false
 };
 
+// ==========================================
+// Language System
+// ==========================================
+let currentLang = 'pl';
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    localStorage.setItem('surveyLang', lang);
+    translatePage();
+}
+
+function translatePage() {
+    // Translate all elements with data-translate attribute
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[key] && translations[key][currentLang]) {
+            if (el.tagName === 'INPUT' && el.type === 'submit') {
+                el.value = translations[key][currentLang];
+            } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = translations[key][currentLang];
+            } else {
+                el.innerHTML = translations[key][currentLang];
+            }
+        }
+    });
+    
+    // Update button texts
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const validateTokenBtn = document.getElementById('validateTokenBtn');
+    
+    if (prevBtn) prevBtn.textContent = currentLang === 'pl' ? 'Wstecz' : 'Back';
+    if (nextBtn) nextBtn.textContent = currentLang === 'pl' ? 'Dalej' : 'Next';
+    if (submitBtn && !submitBtn.disabled) submitBtn.textContent = currentLang === 'pl' ? 'Wyślij odpowiedzi' : 'Submit answers';
+    if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
+    
+    // Update progress text
+    updateProgress();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    // ============================================
+    // ==========================================
+    // Language Selection
+    // ==========================================
+    const langScreen = document.getElementById('langScreen');
+    const langPLBtn = document.getElementById('langPL');
+    const langENBtn = document.getElementById('langEN');
+    const tokenScreen = document.getElementById('tokenScreen');
+    
+    // Check URL for language parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+    if (urlLang && ['pl', 'en'].includes(urlLang)) {
+        currentLang = urlLang;
+    } else {
+        // Check localStorage
+        const savedLang = localStorage.getItem('surveyLang');
+        if (savedLang && ['pl', 'en'].includes(savedLang)) {
+            currentLang = savedLang;
+        }
+    }
+    
+    // Language button handlers
+    if (langPLBtn) {
+        langPLBtn.addEventListener('click', function() {
+            setLanguage('pl');
+            showTokenScreen();
+        });
+    }
+    
+    if (langENBtn) {
+        langENBtn.addEventListener('click', function() {
+            setLanguage('en');
+            showTokenScreen();
+        });
+    }
+    
+    function showTokenScreen() {
+        if (langScreen) langScreen.style.display = 'none';
+        if (tokenScreen) tokenScreen.style.display = 'flex';
+        translatePage();
+        
+        // If token in URL, auto-validate
+        const urlToken = urlParams.get('token');
+        if (urlToken) {
+            tokenInput.value = urlToken;
+            validateToken(urlToken);
+        }
+    }
+    
+    // ==========================================
     // State Management
-    // ============================================
+    // ==========================================
     const state = {
         currentSection: 1,
         totalSections: 7,
@@ -26,13 +117,12 @@ document.addEventListener('DOMContentLoaded', function() {
         tokenValidated: false
     };
 
-    // ============================================
+    // ==========================================
     // DOM Elements
-    // ============================================
-    const tokenScreen = document.getElementById('tokenScreen');
+    // ==========================================
     const surveyContainer = document.getElementById('surveyContainer');
     const tokenInput = document.getElementById('tokenInput');
-    const validateTokenBtn = document.getElementById('validateTokenBtn');
+    const validateTokenBtn_el = document.getElementById('validateTokenBtn');
     const tokenError = document.getElementById('tokenError');
     
     const form = document.getElementById('surveyForm');
@@ -44,38 +134,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submitBtn');
     const thankYouScreen = document.getElementById('thankYouScreen');
 
-    // ============================================
+    // ==========================================
     // Token Validation
-    // ============================================
+    // ==========================================
     initTokenValidation();
 
     function initTokenValidation() {
-        // Check for token in URL
-        const urlParams = new URLSearchParams(window.location.search);
+        // Check for token in URL (if language was already selected via URL)
         const urlToken = urlParams.get('token');
         
-        if (urlToken) {
+        // If both lang and token in URL, skip language screen
+        if (urlLang && urlToken) {
+            if (langScreen) langScreen.style.display = 'none';
+            if (tokenScreen) tokenScreen.style.display = 'flex';
             tokenInput.value = urlToken;
+            translatePage();
             validateToken(urlToken);
         }
 
         // Token validation button
-        validateTokenBtn.addEventListener('click', () => {
-            const token = tokenInput.value.trim().toUpperCase();
-            if (token) {
-                validateToken(token);
-            } else {
-                showTokenError('Wprowadź token');
-            }
-        });
+        if (validateTokenBtn_el) {
+            validateTokenBtn_el.addEventListener('click', () => {
+                const token = tokenInput.value.trim().toUpperCase();
+                if (token) {
+                    validateToken(token);
+                } else {
+                    showTokenError(currentLang === 'pl' ? 'Wprowadź token' : 'Enter token');
+                }
+            });
+        }
 
         // Enter key in token input
-        tokenInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                validateTokenBtn.click();
-            }
-        });
+        if (tokenInput) {
+            tokenInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    validateTokenBtn_el.click();
+                }
+            });
+        }
     }
 
     async function validateToken(token) {
@@ -95,7 +192,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Token validation error:', error);
-            showTokenError('Błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.');
+            showTokenError(currentLang === 'pl' 
+                ? 'Błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.'
+                : 'Connection error. Check your internet connection and try again.');
         } finally {
             showTokenLoading(false);
         }
@@ -103,11 +202,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getTokenErrorMessage(error) {
         const messages = {
-            'Token required': 'Wprowadź token',
-            'Invalid token': 'Nieprawidłowy token. Sprawdź poprawność i spróbuj ponownie.',
-            'Token already used': 'Ten token został już wykorzystany. Każdy token może być użyty tylko raz.'
+            'pl': {
+                'Token required': 'Wprowadź token',
+                'Invalid token': 'Nieprawidłowy token. Sprawdź poprawność i spróbuj ponownie.',
+                'Token already used': 'Ten token został już wykorzystany. Każdy token może być użyty tylko raz.'
+            },
+            'en': {
+                'Token required': 'Enter token',
+                'Invalid token': 'Invalid token. Check and try again.',
+                'Token already used': 'This token has already been used. Each token can only be used once.'
+            }
         };
-        return messages[error] || 'Wystąpił błąd. Spróbuj ponownie.';
+        return messages[currentLang][error] || (currentLang === 'pl' ? 'Wystąpił błąd. Spróbuj ponownie.' : 'An error occurred. Try again.');
     }
 
     function showTokenError(message) {
@@ -121,11 +227,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showTokenLoading(loading) {
         if (loading) {
-            validateTokenBtn.disabled = true;
-            validateTokenBtn.innerHTML = '<span class="token-loading"></span>';
+            validateTokenBtn_el.disabled = true;
+            validateTokenBtn_el.innerHTML = '<span class="token-loading"></span>';
         } else {
-            validateTokenBtn.disabled = false;
-            validateTokenBtn.textContent = 'Weryfikuj';
+            validateTokenBtn_el.disabled = false;
+            validateTokenBtn_el.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
         }
     }
 
@@ -142,9 +248,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ============================================
+    // ==========================================
     // Survey Initialization
-    // ============================================
+    // ==========================================
     function init() {
         setupEventListeners();
         setupConditionalLogic();
@@ -155,9 +261,9 @@ document.addEventListener('DOMContentLoaded', function() {
         showSection(1);
     }
 
-    // ============================================
+    // ==========================================
     // Event Listeners
-    // ============================================
+    // ==========================================
     function setupEventListeners() {
         // Navigation buttons
         prevBtn.addEventListener('click', () => navigateSection(-1));
@@ -205,9 +311,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setupCheckboxOther('q20_obstacles', 'other', 'q20_other_container');
     }
 
-    // ============================================
+    // ==========================================
     // Conditional Logic
-    // ============================================
+    // ==========================================
     function setupConditionalLogic() {
         const otelStatusValue = document.querySelector('input[name="q7_otel_status"]:checked');
         if (otelStatusValue) {
@@ -241,12 +347,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (state.otelStatus === 'yes') {
             otelUsersSection.style.display = 'block';
             nonOtelUsersSection.style.display = 'none';
-            // Sekcja V będzie pokazywana przez nawigację (klasa active)
             otelUsabilitySection.classList.add('otel-enabled');
         } else {
             otelUsersSection.style.display = 'none';
             nonOtelUsersSection.style.display = 'block';
-            // Sekcja V będzie pomijana w nawigacji
             otelUsabilitySection.classList.remove('otel-enabled');
         }
 
@@ -283,9 +387,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ============================================
+    // ==========================================
     // Navigation
-    // ============================================
+    // ==========================================
     function navigateSection(direction) {
         const newSection = state.currentSection + direction;
         
@@ -308,12 +412,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showSection(sectionNum) {
-        // Ukryj wszystkie sekcje
         sections.forEach(section => {
             section.classList.remove('active');
-            // Nie zmieniaj display dla sekcji warunkowych (obsługiwanych osobno)
             if (!section.id || (section.id !== 'otelUsersSection' && section.id !== 'nonOtelUsersSection')) {
-                section.style.display = '';  // Reset inline style, pozwól CSS działać
+                section.style.display = '';
             }
         });
 
@@ -346,8 +448,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProgress() {
         const effectiveSections = getEffectiveTotalSections();
         const progress = (state.currentSection / effectiveSections) * 100;
-        progressFill.style.width = `${progress}%`;
-        progressText.textContent = `Sekcja ${state.currentSection} z ${effectiveSections}`;
+        if (progressFill) progressFill.style.width = `${progress}%`;
+        if (progressText) {
+            if (currentLang === 'en') {
+                progressText.textContent = `Section ${state.currentSection} of ${effectiveSections}`;
+            } else {
+                progressText.textContent = `Sekcja ${state.currentSection} z ${effectiveSections}`;
+            }
+        }
     }
 
     function getEffectiveTotalSections() {
@@ -359,9 +467,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateProgress();
     }
 
-    // ============================================
+    // ==========================================
     // Validation
-    // ============================================
+    // ==========================================
     function validateCurrentSection() {
         const currentSectionEl = document.querySelector(`[data-section="${state.currentSection}"]`);
         const requiredInputs = currentSectionEl.querySelectorAll('[required]');
@@ -452,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const message = document.createElement('div');
         message.className = 'validation-message';
-        message.textContent = 'To pole jest wymagane';
+        message.textContent = currentLang === 'pl' ? 'To pole jest wymagane' : 'This field is required';
         message.style.cssText = `
             color: #ef4444;
             font-size: 0.85rem;
@@ -469,9 +577,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ============================================
+    // ==========================================
     // Ranking (Drag & Drop)
-    // ============================================
+    // ==========================================
     function setupRanking() {
         const container = document.getElementById('rankingContainer');
         if (!container) return;
@@ -596,23 +704,10 @@ document.addEventListener('DOMContentLoaded', function() {
         touchCurrentItem = null;
     }
 
-    // ============================================
+    // ==========================================
     // Character Counters
-    // ============================================
+    // ==========================================
     function setupCharCounters() {
-        const textareas = document.querySelectorAll('textarea[maxlength]');
-        
-        textareas.forEach(textarea => {
-            const counterId = textarea.name.replace('q', 'q') + 'CharCount';
-            const counter = document.getElementById(counterId.replace('_', '').replace('biggest_benefit', '32CharCount').replace('biggest_challenge', '33CharCount').replace('comments', '34CharCount').replace('adoption_conditions', '22CharCount'));
-            
-            if (counter) {
-                textarea.addEventListener('input', function() {
-                    counter.textContent = this.value.length;
-                });
-            }
-        });
-
         setupCharCounter('q22_adoption_conditions', 'q22CharCount');
         setupCharCounter('q32_biggest_benefit', 'q32CharCount');
         setupCharCounter('q33_biggest_challenge', 'q33CharCount');
@@ -630,9 +725,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ============================================
+    // ==========================================
     // Checkbox Limits
-    // ============================================
+    // ==========================================
     function setupCheckboxLimits() {
         const limitedGroups = document.querySelectorAll('.checkbox-grid[data-max]');
         
@@ -657,7 +752,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const message = document.createElement('div');
         message.className = 'limit-message';
-        message.textContent = `Możesz wybrać maksymalnie ${max} opcje`;
+        message.textContent = currentLang === 'pl' 
+            ? `Możesz wybrać maksymalnie ${max} opcje`
+            : `You can select maximum ${max} options`;
         message.style.cssText = `
             color: #f59e0b;
             font-size: 0.85rem;
@@ -671,9 +768,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => message.remove(), 2000);
     }
 
-    // ============================================
+    // ==========================================
     // Form Submission
-    // ============================================
+    // ==========================================
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -683,7 +780,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Disable submit button
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="token-loading"></span> Wysyłanie...';
+        submitBtn.innerHTML = currentLang === 'pl' 
+            ? '<span class="token-loading"></span> Wysyłanie...'
+            : '<span class="token-loading"></span> Submitting...';
 
         // Collect form data
         const formData = new FormData(form);
@@ -706,7 +805,8 @@ document.addEventListener('DOMContentLoaded', function() {
             completionTime: calculateCompletionTime(),
             timestamp: new Date().toISOString(),
             respondentType: classifyRespondent(data.q1_experience),
-            otelStatus: state.otelStatus
+            otelStatus: state.otelStatus,
+            language: currentLang
         };
 
         // Submit to Cloudflare Worker
@@ -736,7 +836,9 @@ document.addEventListener('DOMContentLoaded', function() {
             saveToLocalStorage(data);
             
             // Show error but still show thank you (data is saved locally)
-            alert('Wystąpił problem z wysłaniem odpowiedzi. Twoje dane zostały zapisane lokalnie. Skontaktuj się z administratorem ankiety.');
+            alert(currentLang === 'pl'
+                ? 'Wystąpił problem z wysłaniem odpowiedzi. Twoje dane zostały zapisane lokalnie. Skontaktuj się z administratorem ankiety.'
+                : 'There was a problem submitting your response. Your data has been saved locally. Please contact the survey administrator.');
             showThankYou(data);
         }
     }
@@ -781,12 +883,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.querySelector('.progress-container').style.display = 'none';
 
+        // Translate thank you screen
+        const thankYouTitle = document.querySelector('#thankYouScreen h2');
+        const thankYouText = document.querySelector('#thankYouScreen p');
+        if (thankYouTitle) {
+            thankYouTitle.textContent = currentLang === 'pl' ? 'Dziękujemy!' : 'Thank you!';
+        }
+        if (thankYouText) {
+            thankYouText.innerHTML = currentLang === 'pl'
+                ? 'Twoje odpowiedzi zostały zapisane.<br>Dziękujemy za udział w badaniu!'
+                : 'Your responses have been saved.<br>Thank you for participating in the study!';
+        }
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ============================================
+    // ==========================================
     // CSS for validation (add dynamically)
-    // ============================================
+    // ==========================================
     const validationStyles = document.createElement('style');
     validationStyles.textContent = `
         .invalid {
