@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ankieta: OpenTelemetry - MTTD/MTTR</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/lang-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Language Selection Screen -->
+    <div id="langScreen" class="lang-screen">
+        <div class="lang-container">
+            <div class="lang-icon">🌐</div>
+            <h2>Wybierz język / Choose language</h2>
+            <div class="lang-buttons">
+                <button type="button" class="lang-btn" data-lang="pl">
+                    <span class="lang-flag">🇵🇱</span>
+                    <span class="lang-name">Polski</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="en">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-name">English</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Token Validation Screen -->
-    <div id="tokenScreen" class="token-screen">
+    <div id="tokenScreen" class="token-screen" style="display: none;">
         <div class="token-container">
             <div class="token-icon">🔐</div>
             <h2>Weryfikacja dostępu</h2>
@@ -34,6 +53,9 @@
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                 </svg>
             </div>
+            <button type="button" id="langSwitcher" class="lang-switcher" title="Change language">
+                🌐
+            </button>
             <h1>Badanie: Wpływ OpenTelemetry na MTTD i MTTR</h1>
             <p class="subtitle">MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)</p>
             <p class="subtitle">Badanie naukowe | Czas wypełnienia: ~6-8 min</p>
@@ -1394,7 +1416,7 @@
 
         <!-- Footer -->
         <footer class="survey-footer">
-            <p>Badanie realizowane w ramach pracy magisterskiej | 2026</p>
+            <p>Badanie naukowe | 2026</p>
             <p class="privacy-note">
                 🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.
             </p>
