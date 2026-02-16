@@ -7,10 +7,110 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    /* Language Screen Styles */
+    .lang-screen {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+    }
+    
+    .lang-container {
+        background: white;
+        border-radius: 20px;
+        padding: 50px 40px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        width: 100%;
+    }
+    
+    .lang-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+    
+    .lang-container h2 {
+        color: #1a1a2e;
+        margin-bottom: 30px;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .lang-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .lang-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        padding: 18px 30px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+    }
+    
+    .lang-btn:hover {
+        border-color: #667eea;
+        background: #f8f9ff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+    
+    .lang-flag {
+        font-size: 1.8rem;
+    }
+    
+    .lang-name {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .lang-btn-pl:hover {
+        border-color: #dc143c;
+        background: #fff5f5;
+    }
+    
+    .lang-btn-en:hover {
+        border-color: #00247d;
+        background: #f5f8ff;
+    }
+    </style>
+
 </head>
 <body>
+    <!-- Language Selection Screen -->
+    <div id="langScreen" class="lang-screen">
+        <div class="lang-container">
+            <div class="lang-icon">🌐</div>
+            <h2>Wybierz język / Choose language</h2>
+            <div class="lang-buttons">
+                <button type="button" id="langPL" class="lang-btn lang-btn-pl">
+                    <span class="lang-flag">🇵🇱</span>
+                    <span class="lang-name">Polski</span>
+                </button>
+                <button type="button" id="langEN" class="lang-btn lang-btn-en">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-name">English</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Token Validation Screen -->
-    <div id="tokenScreen" class="token-screen">
+    <div id="tokenScreen" class="token-screen" style="display: none;">
         <div class="token-container">
             <div class="token-icon">🔐</div>
             <h2>Weryfikacja dostępu</h2>
