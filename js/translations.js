@@ -1,815 +1,339 @@
 /**
- * Complete translations for the OpenTelemetry MTTD/MTTR Survey
- * Polish (pl) and English (en)
+ * Translations for OpenTelemetry MTTD/MTTR Survey
+ * Key-based system for reliable translation
  */
-const translations = {
-    // ========== COMMON UI ELEMENTS ==========
-    "Weryfikacja dostępu": {
-        "pl": "Weryfikacja dostępu",
-        "en": "Access Verification"
-    },
-    "Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.": {
-        "pl": "Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.",
-        "en": "This survey requires an invitation. Enter the token you received or use the invitation link."
-    },
-    "Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.": {
-        "pl": "Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.",
-        "en": "Don't have a token? Contact the person who sent you the invitation."
-    },
-    "Weryfikuj": {
-        "pl": "Weryfikuj",
-        "en": "Verify"
-    },
-    "Wstecz": {
-        "pl": "Wstecz",
-        "en": "Back"
-    },
-    "Dalej": {
-        "pl": "Dalej",
-        "en": "Next"
-    },
-    "Wyślij odpowiedzi": {
-        "pl": "Wyślij odpowiedzi",
-        "en": "Submit answers"
-    },
-
-    // ========== HEADER ==========
-    "Badanie: Wpływ OpenTelemetry na MTTD i MTTR": {
-        "pl": "Badanie: Wpływ OpenTelemetry na MTTD i MTTR",
-        "en": "Study: OpenTelemetry Impact on MTTD and MTTR"
-    },
-    "MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)": {
-        "pl": "MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)",
-        "en": "MTTD = Mean Time To Detect | MTTR = Mean Time To Recovery"
-    },
-    "Badanie naukowe | Czas wypełnienia: ~6-8 min": {
-        "pl": "Badanie naukowe | Czas wypełnienia: ~6-8 min",
-        "en": "Research study | Completion time: ~6-8 min"
-    },
-
-    // ========== SECTION I: DEMOGRAPHICS ==========
-    "Informacje demograficzne": {
-        "pl": "Informacje demograficzne",
-        "en": "Demographics"
-    },
+const t = {
+    // ========== UI ==========
+    langTitle: { pl: "Wybierz język ankiety", en: "Select survey language" },
+    tokenTitle: { pl: "Weryfikacja dostępu", en: "Access Verification" },
+    tokenDesc: { pl: "Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.", en: "This survey requires an invitation. Enter the token you received or use the invitation link." },
+    tokenHelp: { pl: "Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.", en: "Don't have a token? Contact the person who sent you the invitation." },
+    tokenPlaceholder: { pl: "Np. OTEL-2026-ABC123", en: "E.g. OTEL-2026-ABC123" },
+    verifyBtn: { pl: "Weryfikuj", en: "Verify" },
+    backBtn: { pl: "Wstecz", en: "Back" },
+    nextBtn: { pl: "Dalej", en: "Next" },
+    submitBtn: { pl: "Wyślij odpowiedzi", en: "Submit answers" },
+    sectionOf: { pl: "Sekcja", en: "Section" },
+    of: { pl: "z", en: "of" },
+    required: { pl: "(wymagane)", en: "(required)" },
+    optional: { pl: "(opcjonalnie)", en: "(optional)" },
+    characters: { pl: "znaków", en: "characters" },
+    minutes: { pl: "minut", en: "minutes" },
     
+    // Header & Footer
+    headerTitle: { pl: "Badanie: Wpływ OpenTelemetry na MTTD i MTTR", en: "Study: OpenTelemetry Impact on MTTD and MTTR" },
+    headerSubtitle: { pl: "MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)", en: "MTTD = Mean Time To Detect | MTTR = Mean Time To Recovery" },
+    footerTitle: { pl: "Badanie naukowe | 2026", en: "Research Study | 2026" },
+    footerAnon: { pl: "Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", en: "This survey is anonymous. Data is used only for research purposes." },
+    
+    // Errors
+    errRequired: { pl: "To pole jest wymagane", en: "This field is required" },
+    errInvalidToken: { pl: "Nieprawidłowy lub wykorzystany token", en: "Invalid or used token" },
+    errSubmit: { pl: "Błąd wysyłania. Spróbuj ponownie.", en: "Submission error. Please try again." },
+    
+    // Thank you
+    thankTitle: { pl: "Dziękujemy za udział!", en: "Thank you for participating!" },
+    thankMsg: { pl: "Twoje odpowiedzi zostały zapisane. Dziękujemy za poświęcony czas.", en: "Your responses have been saved. Thank you for your time." },
+    
+    // ========== SECTIONS ==========
+    sec1: { pl: "Informacje demograficzne", en: "Demographics" },
+    sec2: { pl: "Obecne praktyki monitoringu", en: "Current Monitoring Practices" },
+    sec3: { pl: "Samoocena MTTD i MTTR", en: "MTTD and MTTR – Self-Assessment" },
+    sec4: { pl: "Wpływ OpenTelemetry", en: "OpenTelemetry Impact" },
+    sec5: { pl: "Przydatność elementów OpenTelemetry", en: "OpenTelemetry Element Usefulness" },
+    sec6: { pl: "Wiedza i satysfakcja", en: "Knowledge and Satisfaction" },
+    sec7: { pl: "Pytania otwarte", en: "Open Questions" },
+    
+    // MTTR Info Box
+    mttrInfoTitle: { pl: "Uwaga dotycząca MTTR:", en: "Note about MTTR:" },
+    mttrInfoIntro: { pl: "Akronim MTTR ma trzy możliwe interpretacje:", en: "The MTTR acronym has three possible interpretations:" },
+    mttrRepair: { pl: "Mean Time To Repair – tylko czas naprawy (bez diagnostyki)", en: "Mean Time To Repair – repair time only (excluding diagnostics)" },
+    mttrRecovery: { pl: "Mean Time To Recovery – od wykrycia do pełnego przywrócenia usługi", en: "Mean Time To Recovery – from detection to full service restoration" },
+    mttrResolve: { pl: "Mean Time To Resolve – cały cykl życia incydentu (z post-mortem)", en: "Mean Time To Resolve – entire incident lifecycle (including post-mortem)" },
+    mttrUsed: { pl: "W tym badaniu używamy definicji Recovery – czyli czas od wykrycia incydentu do pełnego przywrócenia usługi do stanu operacyjnego. Ta interpretacja bezpośrednio przekłada się na czas niedostępności odczuwany przez użytkowników.", en: "This study uses the Recovery definition – time from incident detection to full service restoration. This interpretation directly reflects downtime experienced by users." },
+    
+    // Amateur info
+    amateurInfo: { pl: "Ze względu na krótkie doświadczenie możesz podać wartości orientacyjne lub pozostawić pola puste.", en: "Due to limited experience, you may provide approximate values or leave fields empty." },
+    
+    // Open questions intro
+    openIntro: { pl: "Twoje szczegółowe odpowiedzi są bardzo cenne dla badania. Opisz swoje doświadczenia własnymi słowami.", en: "Your detailed answers are very valuable for the research. Describe your experiences in your own words." },
+    
+    // ========== QUESTIONS ==========
     // Q1
-    "Ile lat doświadczenia zawodowego posiadasz w obszarze DevOps, SRE, Backend Development lub pokrewnym?": {
-        "pl": "Ile lat doświadczenia zawodowego posiadasz w obszarze DevOps, SRE, Backend Development lub pokrewnym?",
-        "en": "How many years of professional experience do you have in DevOps, SRE, Backend Development or related fields?"
-    },
-    "Mniej niż 6 miesięcy": {
-        "pl": "Mniej niż 6 miesięcy",
-        "en": "Less than 6 months"
-    },
-    "6 miesięcy – 1 rok": {
-        "pl": "6 miesięcy – 1 rok",
-        "en": "6 months – 1 year"
-    },
-    "1–2 lata": {
-        "pl": "1–2 lata",
-        "en": "1–2 years"
-    },
-    "3–5 lat": {
-        "pl": "3–5 lat",
-        "en": "3–5 years"
-    },
-    "6–10 lat": {
-        "pl": "6–10 lat",
-        "en": "6–10 years"
-    },
-    "Ponad 10 lat": {
-        "pl": "Ponad 10 lat",
-        "en": "More than 10 years"
-    },
-
+    q1: { pl: "Ile lat doświadczenia zawodowego posiadasz w obszarze DevOps, SRE, Backend Development lub pokrewnym?", en: "How many years of professional experience do you have in DevOps, SRE, Backend Development or related fields?" },
+    q1_o1: { pl: "Mniej niż 6 miesięcy", en: "Less than 6 months" },
+    q1_o2: { pl: "6 miesięcy – 1 rok", en: "6 months – 1 year" },
+    q1_o3: { pl: "1–2 lata", en: "1–2 years" },
+    q1_o4: { pl: "3–5 lat", en: "3–5 years" },
+    q1_o5: { pl: "6–10 lat", en: "6–10 years" },
+    q1_o6: { pl: "Ponad 10 lat", en: "More than 10 years" },
+    
     // Q2
-    "Jaka jest Twoja obecna rola zawodowa?": {
-        "pl": "Jaka jest Twoja obecna rola zawodowa?",
-        "en": "What is your current professional role?"
-    },
-    "-- Wybierz rolę --": {
-        "pl": "-- Wybierz rolę --",
-        "en": "-- Select role --"
-    },
-    "Wpisz swoją rolę...": {
-        "pl": "Wpisz swoją rolę...",
-        "en": "Enter your role..."
-    },
-
+    q2: { pl: "Jaka jest Twoja obecna rola zawodowa?", en: "What is your current professional role?" },
+    q2_placeholder: { pl: "-- Wybierz rolę --", en: "-- Select role --" },
+    q2_other: { pl: "Wpisz swoją rolę...", en: "Enter your role..." },
+    q2_o1: { pl: "DevOps Engineer", en: "DevOps Engineer" },
+    q2_o2: { pl: "Site Reliability Engineer (SRE)", en: "Site Reliability Engineer (SRE)" },
+    q2_o3: { pl: "Platform Engineer", en: "Platform Engineer" },
+    q2_o4: { pl: "Backend Developer", en: "Backend Developer" },
+    q2_o5: { pl: "Full-stack Developer", en: "Full-stack Developer" },
+    q2_o6: { pl: "Cloud Architect", en: "Cloud Architect" },
+    q2_o7: { pl: "System Administrator", en: "System Administrator" },
+    q2_o8: { pl: "Tech Lead / Engineering Manager", en: "Tech Lead / Engineering Manager" },
+    q2_o9: { pl: "Student / Praktykant", en: "Student / Intern" },
+    q2_o10: { pl: "Inna", en: "Other" },
+    
     // Q3
-    "W jakiej branży działa Twoja organizacja?": {
-        "pl": "W jakiej branży działa Twoja organizacja?",
-        "en": "What industry does your organization operate in?"
-    },
-    "-- Wybierz branżę --": {
-        "pl": "-- Wybierz branżę --",
-        "en": "-- Select industry --"
-    },
-    "Wpisz branżę...": {
-        "pl": "Wpisz branżę...",
-        "en": "Enter industry..."
-    },
-    "Finanse i bankowość": {
-        "pl": "Finanse i bankowość",
-        "en": "Finance and banking"
-    },
-    "E-commerce / Retail": {
-        "pl": "E-commerce / Retail",
-        "en": "E-commerce / Retail"
-    },
-    "Technologie / Software house": {
-        "pl": "Technologie / Software house",
-        "en": "Technology / Software house"
-    },
-    "Telekomunikacja": {
-        "pl": "Telekomunikacja",
-        "en": "Telecommunications"
-    },
-    "Media i rozrywka": {
-        "pl": "Media i rozrywka",
-        "en": "Media and entertainment"
-    },
-    "Ochrona zdrowia": {
-        "pl": "Ochrona zdrowia",
-        "en": "Healthcare"
-    },
-    "Produkcja / Przemysł": {
-        "pl": "Produkcja / Przemysł",
-        "en": "Manufacturing / Industry"
-    },
-    "Sektor publiczny / Edukacja": {
-        "pl": "Sektor publiczny / Edukacja",
-        "en": "Public sector / Education"
-    },
-    "Inna": {
-        "pl": "Inna",
-        "en": "Other"
-    },
-
+    q3: { pl: "W jakiej branży działa Twoja organizacja?", en: "What industry does your organization operate in?" },
+    q3_placeholder: { pl: "-- Wybierz branżę --", en: "-- Select industry --" },
+    q3_other: { pl: "Wpisz branżę...", en: "Enter industry..." },
+    q3_o1: { pl: "Finanse i bankowość", en: "Finance and banking" },
+    q3_o2: { pl: "E-commerce / Retail", en: "E-commerce / Retail" },
+    q3_o3: { pl: "Technologie / Software house", en: "Technology / Software house" },
+    q3_o4: { pl: "Telekomunikacja", en: "Telecommunications" },
+    q3_o5: { pl: "Media i rozrywka", en: "Media and entertainment" },
+    q3_o6: { pl: "Ochrona zdrowia", en: "Healthcare" },
+    q3_o7: { pl: "Produkcja / Przemysł", en: "Manufacturing / Industry" },
+    q3_o8: { pl: "Sektor publiczny / Edukacja", en: "Public sector / Education" },
+    q3_o9: { pl: "Inna", en: "Other" },
+    
     // Q4
-    "Jaka jest przybliżona wielkość Twojej organizacji (liczba pracowników)?": {
-        "pl": "Jaka jest przybliżona wielkość Twojej organizacji (liczba pracowników)?",
-        "en": "What is the approximate size of your organization (number of employees)?"
-    },
-    "1–10 (mikroprzedsiębiorstwo)": {
-        "pl": "1–10 (mikroprzedsiębiorstwo)",
-        "en": "1–10 (micro)"
-    },
-    "11–50 (małe)": {
-        "pl": "11–50 (małe)",
-        "en": "11–50 (small)"
-    },
-    "51–250 (średnie)": {
-        "pl": "51–250 (średnie)",
-        "en": "51–250 (medium)"
-    },
-    "251–1000 (duże)": {
-        "pl": "251–1000 (duże)",
-        "en": "251–1000 (large)"
-    },
-    "Ponad 1000 (korporacja)": {
-        "pl": "Ponad 1000 (korporacja)",
-        "en": "More than 1000 (enterprise)"
-    },
-
+    q4: { pl: "Jaka jest przybliżona wielkość Twojej organizacji (liczba pracowników)?", en: "What is the approximate size of your organization (number of employees)?" },
+    q4_o1: { pl: "1–10 (mikroprzedsiębiorstwo)", en: "1–10 (micro)" },
+    q4_o2: { pl: "11–50 (małe)", en: "11–50 (small)" },
+    q4_o3: { pl: "51–250 (średnie)", en: "51–250 (medium)" },
+    q4_o4: { pl: "251–1000 (duże)", en: "251–1000 (large)" },
+    q4_o5: { pl: "Ponad 1000 (korporacja)", en: "More than 1000 (enterprise)" },
+    
     // Q5
-    "Ile mikroserwisów lub komponentów aplikacyjnych obsługuje Twój zespół?": {
-        "pl": "Ile mikroserwisów lub komponentów aplikacyjnych obsługuje Twój zespół?",
-        "en": "How many microservices or application components does your team manage?"
-    },
-    "Ponad 100": {
-        "pl": "Ponad 100",
-        "en": "More than 100"
-    },
-    "Nie wiem / Nie dotyczy": {
-        "pl": "Nie wiem / Nie dotyczy",
-        "en": "Don't know / N/A"
-    },
-
-    // ========== SECTION II: CURRENT MONITORING ==========
-    "Obecne praktyki monitoringu": {
-        "pl": "Obecne praktyki monitoringu",
-        "en": "Current Monitoring Practices"
-    },
-
+    q5: { pl: "Ile mikroserwisów lub komponentów aplikacyjnych obsługuje Twój zespół?", en: "How many microservices or application components does your team manage?" },
+    q5_o1: { pl: "1–5", en: "1–5" },
+    q5_o2: { pl: "6–15", en: "6–15" },
+    q5_o3: { pl: "16–50", en: "16–50" },
+    q5_o4: { pl: "51–100", en: "51–100" },
+    q5_o5: { pl: "Ponad 100", en: "More than 100" },
+    q5_o6: { pl: "Nie wiem / Nie dotyczy", en: "Don't know / N/A" },
+    
     // Q6
-    "Jakich narzędzi do observability używasz w swojej pracy?": {
-        "pl": "Jakich narzędzi do observability używasz w swojej pracy?",
-        "en": "What observability tools do you use in your work?"
-    },
-    "(możesz wybrać wiele)": {
-        "pl": "(możesz wybrać wiele)",
-        "en": "(select all that apply)"
-    },
-    "Inne": {
-        "pl": "Inne",
-        "en": "Other"
-    },
-    "Nie używam żadnych": {
-        "pl": "Nie używam żadnych",
-        "en": "I don't use any"
-    },
-    "Wpisz inne narzędzia...": {
-        "pl": "Wpisz inne narzędzia...",
-        "en": "Enter other tools..."
-    },
-
+    q6: { pl: "Jakich narzędzi do observability używasz w swojej pracy?", en: "What observability tools do you use in your work?" },
+    q6_hint: { pl: "Zaznacz wszystkie pasujące", en: "Select all that apply" },
+    q6_o1: { pl: "Prometheus + Grafana", en: "Prometheus + Grafana" },
+    q6_o2: { pl: "Elastic Stack (ELK)", en: "Elastic Stack (ELK)" },
+    q6_o3: { pl: "Datadog", en: "Datadog" },
+    q6_o4: { pl: "New Relic", en: "New Relic" },
+    q6_o5: { pl: "Dynatrace", en: "Dynatrace" },
+    q6_o6: { pl: "Splunk", en: "Splunk" },
+    q6_o7: { pl: "Jaeger / Zipkin", en: "Jaeger / Zipkin" },
+    q6_o8: { pl: "AWS CloudWatch", en: "AWS CloudWatch" },
+    q6_o9: { pl: "Azure Monitor", en: "Azure Monitor" },
+    q6_o10: { pl: "Google Cloud Operations", en: "Google Cloud Operations" },
+    q6_o11: { pl: "OpenTelemetry Collector", en: "OpenTelemetry Collector" },
+    q6_o12: { pl: "Inne", en: "Other" },
+    q6_other: { pl: "Wpisz inne narzędzia...", en: "Enter other tools..." },
+    
     // Q7
-    "Czy w Twojej organizacji wdrożono OpenTelemetry (OTel)?": {
-        "pl": "Czy w Twojej organizacji wdrożono OpenTelemetry (OTel)?",
-        "en": "Has OpenTelemetry (OTel) been implemented in your organization?"
-    },
-    "(przez wdrożenie rozumiemy użycie SDK, Collectora lub auto-instrumentacji OTel w co najmniej jednym środowisku)": {
-        "pl": "(przez wdrożenie rozumiemy użycie SDK, Collectora lub auto-instrumentacji OTel w co najmniej jednym środowisku)",
-        "en": "(by implementation we mean using OTel SDK, Collector or auto-instrumentation in at least one environment)"
-    },
-    "✅ Tak, w pełni wdrożone w produkcji": {
-        "pl": "✅ Tak, w pełni wdrożone w produkcji",
-        "en": "✅ Yes, fully deployed in production"
-    },
-    "🔄 Tak, częściowo wdrożone (pilotaż lub wybrane systemy)": {
-        "pl": "🔄 Tak, częściowo wdrożone (pilotaż lub wybrane systemy)",
-        "en": "🔄 Yes, partially deployed (pilot or selected systems)"
-    },
-    "🚧 W trakcie wdrażania": {
-        "pl": "🚧 W trakcie wdrażania",
-        "en": "🚧 Implementation in progress"
-    },
-    "📋 Planujemy wdrożenie w ciągu 12 miesięcy": {
-        "pl": "📋 Planujemy wdrożenie w ciągu 12 miesięcy",
-        "en": "📋 Planning to implement within 12 months"
-    },
-    "❌ Nie, i nie planujemy wdrożenia": {
-        "pl": "❌ Nie, i nie planujemy wdrożenia",
-        "en": "❌ No, and we don't plan to implement"
-    },
-    "❓ Nie wiem": {
-        "pl": "❓ Nie wiem",
-        "en": "❓ Don't know"
-    },
-
+    q7: { pl: "Czy Twój zespół wdrożył lub planuje wdrożyć OpenTelemetry?", en: "Has your team implemented or is planning to implement OpenTelemetry?" },
+    q7_o1: { pl: "Tak, używamy w produkcji", en: "Yes, we use it in production" },
+    q7_o2: { pl: "Tak, jesteśmy w trakcie wdrożenia", en: "Yes, we are currently implementing" },
+    q7_o3: { pl: "Planujemy wdrożenie w ciągu 12 miesięcy", en: "We plan to implement within 12 months" },
+    q7_o4: { pl: "Rozważamy, ale bez konkretnych planów", en: "We're considering it, but no concrete plans" },
+    q7_o5: { pl: "Nie, nie planujemy", en: "No, we don't plan to" },
+    q7_o6: { pl: "Nie znam OpenTelemetry", en: "I don't know OpenTelemetry" },
+    
     // Q8
-    "Jak długo OpenTelemetry jest używane w Twojej organizacji?": {
-        "pl": "Jak długo OpenTelemetry jest używane w Twojej organizacji?",
-        "en": "How long has OpenTelemetry been used in your organization?"
-    },
-    "Mniej niż 3 miesiące": {
-        "pl": "Mniej niż 3 miesiące",
-        "en": "Less than 3 months"
-    },
-    "3–6 miesięcy": {
-        "pl": "3–6 miesięcy",
-        "en": "3–6 months"
-    },
-    "6–12 miesięcy": {
-        "pl": "6–12 miesięcy",
-        "en": "6–12 months"
-    },
-    "Ponad 2 lata": {
-        "pl": "Ponad 2 lata",
-        "en": "More than 2 years"
-    },
-
+    q8: { pl: "Jak długo Twój zespół używa OpenTelemetry?", en: "How long has your team been using OpenTelemetry?" },
+    q8_o1: { pl: "Mniej niż 3 miesiące", en: "Less than 3 months" },
+    q8_o2: { pl: "3–6 miesięcy", en: "3–6 months" },
+    q8_o3: { pl: "6–12 miesięcy", en: "6–12 months" },
+    q8_o4: { pl: "1–2 lata", en: "1–2 years" },
+    q8_o5: { pl: "Ponad 2 lata", en: "More than 2 years" },
+    
     // Q9
-    "Które komponenty OpenTelemetry są aktualnie używane?": {
-        "pl": "Które komponenty OpenTelemetry są aktualnie używane?",
-        "en": "Which OpenTelemetry components are currently in use?"
-    },
-    "Traces (śledzenie rozproszone)": {
-        "pl": "Traces (śledzenie rozproszone)",
-        "en": "Traces (distributed tracing)"
-    },
-    "Metrics (metryki)": {
-        "pl": "Metrics (metryki)",
-        "en": "Metrics"
-    },
-    "Logs (logi)": {
-        "pl": "Logs (logi)",
-        "en": "Logs"
-    },
-    "Auto-instrumentacja (SDK)": {
-        "pl": "Auto-instrumentacja (SDK)",
-        "en": "Auto-instrumentation (SDK)"
-    },
-    "Manualna instrumentacja": {
-        "pl": "Manualna instrumentacja",
-        "en": "Manual instrumentation"
-    },
-    "Baggage / Context Propagation": {
-        "pl": "Baggage / Context Propagation",
-        "en": "Baggage / Context Propagation"
-    },
-    "Nie wiem": {
-        "pl": "Nie wiem",
-        "en": "Don't know"
-    },
-
-    // ========== SECTION III: MTTD/MTTR ==========
-    "MTTD i MTTR – samoocena": {
-        "pl": "MTTD i MTTR – samoocena",
-        "en": "MTTD and MTTR – Self-Assessment"
-    },
-
-    // MTTR Definition info box
-    "Uwaga dotycząca MTTR:": {
-        "pl": "Uwaga dotycząca MTTR:",
-        "en": "Note about MTTR:"
-    },
-    "Mean Time To Repair": {
-        "pl": "Mean Time To Repair",
-        "en": "Mean Time To Repair"
-    },
-    "– czas samej naprawy (bez diagnostyki)": {
-        "pl": "– czas samej naprawy (bez diagnostyki)",
-        "en": "– repair time only (excluding diagnostics)"
-    },
-    "Mean Time To Recovery": {
-        "pl": "Mean Time To Recovery",
-        "en": "Mean Time To Recovery"
-    },
-    "– od wykrycia do pełnego przywrócenia usługi": {
-        "pl": "– od wykrycia do pełnego przywrócenia usługi",
-        "en": "– from detection to full service restoration"
-    },
-    "Mean Time To Resolve": {
-        "pl": "Mean Time To Resolve",
-        "en": "Mean Time To Resolve"
-    },
-    "– cały cykl życia incydentu (włącznie z post-mortem)": {
-        "pl": "– cały cykl życia incydentu (włącznie z post-mortem)",
-        "en": "– entire incident lifecycle (including post-mortem)"
-    },
-    "W tym badaniu stosujemy definicję Recovery": {
-        "pl": "W tym badaniu stosujemy definicję Recovery",
-        "en": "This study uses the Recovery definition"
-    },
-
+    q9: { pl: "Które komponenty OpenTelemetry są używane w Twoim środowisku?", en: "Which OpenTelemetry components are used in your environment?" },
+    q9_hint: { pl: "Zaznacz wszystkie pasujące", en: "Select all that apply" },
+    q9_o1: { pl: "Traces (ślady rozproszone)", en: "Traces (distributed tracing)" },
+    q9_o2: { pl: "Metrics (metryki)", en: "Metrics" },
+    q9_o3: { pl: "Logs (logi)", en: "Logs" },
+    q9_o4: { pl: "OpenTelemetry Collector", en: "OpenTelemetry Collector" },
+    q9_o5: { pl: "Auto-instrumentacja", en: "Auto-instrumentation" },
+    q9_o6: { pl: "Nie wiem", en: "Don't know" },
+    
     // Q10
-    "W jaki sposób Twój zespół zbiera dane o czasie detekcji (MTTD) i rozwiązania (MTTR) incydentów?": {
-        "pl": "W jaki sposób Twój zespół zbiera dane o czasie detekcji (MTTD) i rozwiązania (MTTR) incydentów?",
-        "en": "How does your team collect MTTD and MTTR incident data?"
-    },
-    "Automatycznie – system ticketowy lub narzędzie ITSM (IT Service Management, np. Jira, ServiceNow)": {
-        "pl": "Automatycznie – system ticketowy lub narzędzie ITSM (IT Service Management, np. Jira, ServiceNow)",
-        "en": "Automatically – ticketing system or ITSM tool (e.g., Jira, ServiceNow)"
-    },
-    "Półautomatycznie – część danych automatycznie, część manualnie": {
-        "pl": "Półautomatycznie – część danych automatycznie, część manualnie",
-        "en": "Semi-automatically – some data automatically, some manually"
-    },
-    "Manualnie – dane są zapisywane ręcznie": {
-        "pl": "Manualnie – dane są zapisywane ręcznie",
-        "en": "Manually – data is recorded by hand"
-    },
-    "Nie zbieramy takich danych": {
-        "pl": "Nie zbieramy takich danych",
-        "en": "We don't collect such data"
-    },
-
+    q10: { pl: "W jaki sposób zbierasz dane o MTTD i MTTR?", en: "How do you collect MTTD and MTTR data?" },
+    q10_o1: { pl: "Automatycznie z narzędzi monitoringu", en: "Automatically from monitoring tools" },
+    q10_o2: { pl: "Manualnie rejestrujemy incydenty", en: "We manually record incidents" },
+    q10_o3: { pl: "Kombinacja obu metod", en: "Combination of both methods" },
+    q10_o4: { pl: "Nie zbieramy tych metryk", en: "We don't collect these metrics" },
+    
     // Q11
-    "Jaki był średni czas detekcji incydentu (MTTD) w ciągu ostatnich 6 miesięcy?": {
-        "pl": "Jaki był średni czas detekcji incydentu (MTTD) w ciągu ostatnich 6 miesięcy?",
-        "en": "What was the average incident detection time (MTTD) over the last 6 months?"
-    },
-    "Podaj wartość w minutach": {
-        "pl": "Podaj wartość w minutach",
-        "en": "Enter value in minutes"
-    },
-    "minut": {
-        "pl": "minut",
-        "en": "minutes"
-    },
-
+    q11: { pl: "Jaki był średni czas wykrycia incydentu (MTTD) w ostatnich 6 miesiącach?", en: "What was the average incident detection time (MTTD) over the last 6 months?" },
+    q11_hint: { pl: "Podaj wartość w minutach", en: "Enter value in minutes" },
+    q11_placeholder: { pl: "np. 15", en: "e.g. 15" },
+    q11_range: { pl: "Wartość od 0 do 10080 (maksymalnie tydzień)", en: "Value from 0 to 10080 (maximum one week)" },
+    
     // Q12
-    "Jaki był średni czas przywrócenia usługi (MTTR) w ciągu ostatnich 6 miesięcy?": {
-        "pl": "Jaki był średni czas przywrócenia usługi (MTTR) w ciągu ostatnich 6 miesięcy?",
-        "en": "What was the average time to recovery (MTTR) over the last 6 months?"
-    },
-
+    q12: { pl: "Jaki był średni czas przywrócenia usługi (MTTR) w ostatnich 6 miesiącach?", en: "What was the average time to recovery (MTTR) over the last 6 months?" },
+    q12_note: { pl: "(od wykrycia do pełnego przywrócenia usługi)", en: "(from detection to full service restoration)" },
+    q12_hint: { pl: "Podaj wartość w minutach", en: "Enter value in minutes" },
+    q12_placeholder: { pl: "np. 60", en: "e.g. 60" },
+    q12_range: { pl: "Wartość od 0 do 43200 (maksymalnie miesiąc)", en: "Value from 0 to 43200 (maximum one month)" },
+    
     // Q13
-    "Czy podane wartości MTTD i MTTR są danymi dokładnymi czy orientacyjnymi?": {
-        "pl": "Czy podane wartości MTTD i MTTR są danymi dokładnymi czy orientacyjnymi?",
-        "en": "Are the MTTD and MTTR values you provided accurate or estimates?"
-    },
-    "Dokładne – bazują na pomiarach systemowych": {
-        "pl": "Dokładne – bazują na pomiarach systemowych",
-        "en": "Accurate – based on system measurements"
-    },
-    "Orientacyjne – moja najlepsza estymacja": {
-        "pl": "Orientacyjne – moja najlepsza estymacja",
-        "en": "Estimates – my best estimation"
-    },
-    "Nie jestem pewien/pewna": {
-        "pl": "Nie jestem pewien/pewna",
-        "en": "I'm not sure"
-    },
-
+    q13: { pl: "Jak oceniasz dokładność swoich danych o MTTD/MTTR?", en: "How do you rate the accuracy of your MTTD/MTTR data?" },
+    q13_o1: { pl: "Bardzo dokładne (automatyczne pomiary)", en: "Very accurate (automated measurements)" },
+    q13_o2: { pl: "Dość dokładne (częściowo automatyczne)", en: "Fairly accurate (partially automated)" },
+    q13_o3: { pl: "Szacunkowe (manualne rejestrowanie)", en: "Estimated (manual recording)" },
+    q13_o4: { pl: "Niedokładne / Nie śledzę regularnie", en: "Inaccurate / I don't track regularly" },
+    
     // Q14
-    "Ile incydentów produkcyjnych średnio obsługuje Twój zespół miesięcznie?": {
-        "pl": "Ile incydentów produkcyjnych średnio obsługuje Twój zespół miesięcznie?",
-        "en": "How many production incidents does your team handle monthly on average?"
-    },
-    "Ponad 50": {
-        "pl": "Ponad 50",
-        "en": "More than 50"
-    },
-
-    // ========== SECTION IV: OTel IMPACT ==========
-    "Wpływ OpenTelemetry": {
-        "pl": "Wpływ OpenTelemetry",
-        "en": "OpenTelemetry Impact"
-    },
-    "Ocena wpływu po wdrożeniu": {
-        "pl": "Ocena wpływu po wdrożeniu",
-        "en": "Impact Assessment After Implementation"
-    },
-    "Plany i przeszkody": {
-        "pl": "Plany i przeszkody",
-        "en": "Plans and Obstacles"
-    },
-
+    q14: { pl: "Ile incydentów produkcyjnych wystąpiło w Twoim środowisku w ostatnich 3 miesiącach?", en: "How many production incidents occurred in your environment in the last 3 months?" },
+    q14_o1: { pl: "0 (brak incydentów)", en: "0 (no incidents)" },
+    q14_o2: { pl: "1–5", en: "1–5" },
+    q14_o3: { pl: "6–15", en: "6–15" },
+    q14_o4: { pl: "16–30", en: "16–30" },
+    q14_o5: { pl: "Ponad 30", en: "More than 30" },
+    q14_o6: { pl: "Nie wiem / Nie śledzę", en: "Don't know / Don't track" },
+    
     // Q15
-    "Jak zmieniło się MTTD (Mean Time To Detect) po wdrożeniu OpenTelemetry?": {
-        "pl": "Jak zmieniło się MTTD (Mean Time To Detect) po wdrożeniu OpenTelemetry?",
-        "en": "How did MTTD (Mean Time To Detect) change after implementing OpenTelemetry?"
-    },
-    "Znacząco się wydłużyło": {
-        "pl": "Znacząco się wydłużyło",
-        "en": "Significantly increased"
-    },
-    "Znacząco się skróciło": {
-        "pl": "Znacząco się skróciło",
-        "en": "Significantly decreased"
-    },
-    "Pogorszenie >50%": {
-        "pl": "Pogorszenie >50%",
-        "en": "Worsened >50%"
-    },
-    "Pogorszenie 10-50%": {
-        "pl": "Pogorszenie 10-50%",
-        "en": "Worsened 10-50%"
-    },
-    "Bez zmian": {
-        "pl": "Bez zmian",
-        "en": "No change"
-    },
-    "Poprawa 10-50%": {
-        "pl": "Poprawa 10-50%",
-        "en": "Improved 10-50%"
-    },
-    "Poprawa >50%": {
-        "pl": "Poprawa >50%",
-        "en": "Improved >50%"
-    },
-    "Nie jestem w stanie ocenić": {
-        "pl": "Nie jestem w stanie ocenić",
-        "en": "Unable to assess"
-    },
-
+    q15: { pl: "Jak OpenTelemetry wpłynęło na czas wykrycia incydentów (MTTD)?", en: "How has OpenTelemetry affected incident detection time (MTTD)?" },
+    q15_o1: { pl: "Znaczące skrócenie (>50%)", en: "Significant reduction (>50%)" },
+    q15_o2: { pl: "Umiarkowane skrócenie (20-50%)", en: "Moderate reduction (20-50%)" },
+    q15_o3: { pl: "Nieznaczne skrócenie (<20%)", en: "Slight reduction (<20%)" },
+    q15_o4: { pl: "Bez zmian", en: "No change" },
+    q15_o5: { pl: "Wydłużenie czasu", en: "Increased time" },
+    q15_o6: { pl: "Za wcześnie na ocenę", en: "Too early to assess" },
+    
     // Q16
-    "Jak zmieniło się MTTR (Mean Time To Recovery) po wdrożeniu OpenTelemetry?": {
-        "pl": "Jak zmieniło się MTTR (Mean Time To Recovery) po wdrożeniu OpenTelemetry?",
-        "en": "How did MTTR (Mean Time To Recovery) change after implementing OpenTelemetry?"
-    },
-
+    q16: { pl: "Jak OpenTelemetry wpłynęło na czas przywrócenia usługi (MTTR)?", en: "How has OpenTelemetry affected time to recovery (MTTR)?" },
+    q16_note: { pl: "(od wykrycia do pełnego przywrócenia usługi)", en: "(from detection to full service restoration)" },
+    q16_o1: { pl: "Znaczące skrócenie (>50%)", en: "Significant reduction (>50%)" },
+    q16_o2: { pl: "Umiarkowane skrócenie (20-50%)", en: "Moderate reduction (20-50%)" },
+    q16_o3: { pl: "Nieznaczne skrócenie (<20%)", en: "Slight reduction (<20%)" },
+    q16_o4: { pl: "Bez zmian", en: "No change" },
+    q16_o5: { pl: "Wydłużenie czasu", en: "Increased time" },
+    q16_o6: { pl: "Za wcześnie na ocenę", en: "Too early to assess" },
+    
     // Q17
-    "Jeśli zauważyłeś/aś poprawę, podaj szacunkową wartość skrócenia czasu w procentach:": {
-        "pl": "Jeśli zauważyłeś/aś poprawę, podaj szacunkową wartość skrócenia czasu w procentach:",
-        "en": "If you noticed improvement, estimate the time reduction percentage:"
-    },
-    "Brak poprawy lub pogorszenie": {
-        "pl": "Brak poprawy lub pogorszenie",
-        "en": "No improvement or worsened"
-    },
-    "Ponad 75%": {
-        "pl": "Ponad 75%",
-        "en": "More than 75%"
-    },
-    "Nie jestem w stanie oszacować": {
-        "pl": "Nie jestem w stanie oszacować",
-        "en": "Unable to estimate"
-    },
-
+    q17: { pl: "O ile procent szacujesz poprawę MTTD dzięki OpenTelemetry?", en: "By what percentage do you estimate MTTD improvement thanks to OpenTelemetry?" },
+    q17_hint: { pl: "Użyj suwaka lub wpisz wartość", en: "Use the slider or enter value" },
+    
     // Q18
-    "Które elementy OpenTelemetry miały największy wpływ na poprawę?": {
-        "pl": "Które elementy OpenTelemetry miały największy wpływ na poprawę?",
-        "en": "Which OpenTelemetry elements had the biggest impact on improvement?"
-    },
-    "Uszereguj od 1 (największy) do 5 (najmniejszy) – przeciągnij elementy": {
-        "pl": "Uszereguj od 1 (największy) do 5 (najmniejszy) – przeciągnij elementy",
-        "en": "Rank from 1 (biggest) to 5 (smallest) – drag elements"
-    },
-    "Distributed Traces (śledzenie rozproszone)": {
-        "pl": "Distributed Traces (śledzenie rozproszone)",
-        "en": "Distributed Traces"
-    },
-    "Logs (logi strukturalne)": {
-        "pl": "Logs (logi strukturalne)",
-        "en": "Logs (structured logs)"
-    },
-    "Korelacja między traces/metrics/logs": {
-        "pl": "Korelacja między traces/metrics/logs",
-        "en": "Correlation between traces/metrics/logs"
-    },
-    "Standaryzacja eksportu danych (OTLP)": {
-        "pl": "Standaryzacja eksportu danych (OTLP)",
-        "en": "Data export standardization (OTLP)"
-    },
-
+    q18: { pl: "O ile procent szacujesz poprawę MTTR dzięki OpenTelemetry?", en: "By what percentage do you estimate MTTR improvement thanks to OpenTelemetry?" },
+    q18_note: { pl: "(od wykrycia do pełnego przywrócenia usługi)", en: "(from detection to full service restoration)" },
+    q18_hint: { pl: "Użyj suwaka lub wpisz wartość", en: "Use the slider or enter value" },
+    
     // Q19
-    "W jakim obszarze OpenTelemetry przyniosło największą wartość?": {
-        "pl": "W jakim obszarze OpenTelemetry przyniosło największą wartość?",
-        "en": "In which area did OpenTelemetry bring the most value?"
-    },
-    "Szybsza identyfikacja źródła problemu (root cause analysis)": {
-        "pl": "Szybsza identyfikacja źródła problemu (root cause analysis)",
-        "en": "Faster root cause identification"
-    },
-    "Lepsza widoczność zależności między serwisami": {
-        "pl": "Lepsza widoczność zależności między serwisami",
-        "en": "Better visibility of service dependencies"
-    },
-    "Unifikacja narzędzi i redukcja kosztów": {
-        "pl": "Unifikacja narzędzi i redukcja kosztów",
-        "en": "Tool unification and cost reduction"
-    },
-    "Łatwiejsze onboardingowanie nowych członków zespołu": {
-        "pl": "Łatwiejsze onboardingowanie nowych członków zespołu",
-        "en": "Easier onboarding of new team members"
-    },
-    "Standaryzacja praktyk observability w organizacji": {
-        "pl": "Standaryzacja praktyk observability w organizacji",
-        "en": "Standardization of observability practices"
-    },
-    "Opisz największą wartość...": {
-        "pl": "Opisz największą wartość...",
-        "en": "Describe the biggest value..."
-    },
-
+    q19: { pl: "Które elementy OpenTelemetry najbardziej przyczyniły się do poprawy?", en: "Which OpenTelemetry elements contributed most to the improvement?" },
+    q19_hint: { pl: "Uszereguj od najważniejszego (1) do najmniej ważnego", en: "Rank from most important (1) to least important" },
+    q19_o1: { pl: "Ślady rozproszone (traces)", en: "Distributed traces" },
+    q19_o2: { pl: "Metryki", en: "Metrics" },
+    q19_o3: { pl: "Logi", en: "Logs" },
+    q19_o4: { pl: "Korelacja między sygnałami", en: "Signal correlation" },
+    q19_o5: { pl: "Standaryzacja (OTLP)", en: "Standardization (OTLP)" },
+    
     // Q20
-    "Jakie są główne przeszkody we wdrożeniu OpenTelemetry?": {
-        "pl": "Jakie są główne przeszkody we wdrożeniu OpenTelemetry?",
-        "en": "What are the main obstacles to implementing OpenTelemetry?"
-    },
-    "(wybierz maksymalnie 3)": {
-        "pl": "(wybierz maksymalnie 3)",
-        "en": "(select up to 3)"
-    },
-    "Brak wiedzy i kompetencji w zespole": {
-        "pl": "Brak wiedzy i kompetencji w zespole",
-        "en": "Lack of knowledge and skills in the team"
-    },
-    "Zbyt duży nakład pracy na wdrożenie": {
-        "pl": "Zbyt duży nakład pracy na wdrożenie",
-        "en": "Too much effort required for implementation"
-    },
-    "Koszty migracji z obecnych rozwiązań": {
-        "pl": "Koszty migracji z obecnych rozwiązań",
-        "en": "Migration costs from current solutions"
-    },
-    "Obawy o wydajność i overhead": {
-        "pl": "Obawy o wydajność i overhead",
-        "en": "Performance and overhead concerns"
-    },
-    "Brak wsparcia ze strony kierownictwa": {
-        "pl": "Brak wsparcia ze strony kierownictwa",
-        "en": "Lack of management support"
-    },
-    "Obecne narzędzia są wystarczające": {
-        "pl": "Obecne narzędzia są wystarczające",
-        "en": "Current tools are sufficient"
-    },
-    "Zbyt wczesna faza rozwoju OTel": {
-        "pl": "Zbyt wczesna faza rozwoju OTel",
-        "en": "OTel still too early in development"
-    },
-    "Problemy z kompatybilnością": {
-        "pl": "Problemy z kompatybilnością",
-        "en": "Compatibility issues"
-    },
-    "Opisz inne przeszkody...": {
-        "pl": "Opisz inne przeszkody...",
-        "en": "Describe other obstacles..."
-    },
-
+    q20: { pl: "Jakie są główne bariery w adopcji OpenTelemetry w Twojej organizacji?", en: "What are the main barriers to OpenTelemetry adoption in your organization?" },
+    q20_hint: { pl: "Zaznacz wszystkie pasujące", en: "Select all that apply" },
+    q20_o1: { pl: "Brak zasobów / czasu na wdrożenie", en: "Lack of resources / time for implementation" },
+    q20_o2: { pl: "Brak wiedzy / kompetencji w zespole", en: "Lack of knowledge / skills in the team" },
+    q20_o3: { pl: "Istniejące rozwiązania są wystarczające", en: "Existing solutions are sufficient" },
+    q20_o4: { pl: "Koszt migracji z obecnych narzędzi", en: "Cost of migration from current tools" },
+    q20_o5: { pl: "Brak wsparcia management", en: "Lack of management support" },
+    q20_o6: { pl: "Niedojrzałość OpenTelemetry", en: "OpenTelemetry immaturity" },
+    q20_o7: { pl: "Złożoność integracji", en: "Integration complexity" },
+    q20_o8: { pl: "Inne", en: "Other" },
+    q20_other: { pl: "Wpisz inne bariery...", en: "Enter other barriers..." },
+    
     // Q21
-    "Jak oceniasz prawdopodobieństwo wdrożenia OpenTelemetry w ciągu najbliższych 2 lat?": {
-        "pl": "Jak oceniasz prawdopodobieństwo wdrożenia OpenTelemetry w ciągu najbliższych 2 lat?",
-        "en": "How do you rate the likelihood of implementing OpenTelemetry in the next 2 years?"
-    },
-    "Zdecydowanie nie": {
-        "pl": "Zdecydowanie nie",
-        "en": "Definitely not"
-    },
-    "Zdecydowanie tak": {
-        "pl": "Zdecydowanie tak",
-        "en": "Definitely yes"
-    },
-
+    q21: { pl: "Jak prawdopodobne jest wdrożenie OpenTelemetry w Twojej organizacji w ciągu 2 lat?", en: "How likely is OpenTelemetry implementation in your organization within 2 years?" },
+    q21_o1: { pl: "1 - Bardzo mało prawdopodobne", en: "1 - Very unlikely" },
+    q21_o2: { pl: "2", en: "2" },
+    q21_o3: { pl: "3 - Neutralne", en: "3 - Neutral" },
+    q21_o4: { pl: "4", en: "4" },
+    q21_o5: { pl: "5 - Bardzo prawdopodobne", en: "5 - Very likely" },
+    
     // Q22
-    "Co musiałoby się zmienić, abyś rozważył/a wdrożenie OpenTelemetry?": {
-        "pl": "Co musiałoby się zmienić, abyś rozważył/a wdrożenie OpenTelemetry?",
-        "en": "What would need to change for you to consider implementing OpenTelemetry?"
-    },
-    "Opisz warunki, które skłoniłyby Cię do wdrożenia OTel...": {
-        "pl": "Opisz warunki, które skłoniłyby Cię do wdrożenia OTel...",
-        "en": "Describe conditions that would make you implement OTel..."
-    },
-    "znaków": {
-        "pl": "znaków",
-        "en": "characters"
-    },
-
-    // ========== SECTION V: OTel USABILITY ==========
-    "Ocena użyteczności elementów OpenTelemetry": {
-        "pl": "Ocena użyteczności elementów OpenTelemetry",
-        "en": "OpenTelemetry Element Usefulness Assessment"
-    },
-    "Oceń jak przydatne są poszczególne elementy OpenTelemetry w procesie diagnozowania incydentów.": {
-        "pl": "Oceń jak przydatne są poszczególne elementy OpenTelemetry w procesie diagnozowania incydentów.",
-        "en": "Rate how useful each OpenTelemetry element is in diagnosing incidents."
-    },
-    "Bezużyteczne": {
-        "pl": "Bezużyteczne",
-        "en": "Useless"
-    },
-    "Neutralne": {
-        "pl": "Neutralne",
-        "en": "Neutral"
-    },
-    "Bardzo użyteczne": {
-        "pl": "Bardzo użyteczne",
-        "en": "Very useful"
-    },
-
-    // Q23-27 element names
-    "Distributed Traces (śledzenie rozproszone)": {
-        "pl": "Distributed Traces (śledzenie rozproszone)",
-        "en": "Distributed Traces"
-    },
-    "Korelacja wizualna między traces, metrics i logs": {
-        "pl": "Korelacja wizualna między traces, metrics i logs",
-        "en": "Visual correlation between traces, metrics and logs"
-    },
-    "Standaryzacja eksportu danych (protokół OTLP)": {
-        "pl": "Standaryzacja eksportu danych (protokół OTLP)",
-        "en": "Data export standardization (OTLP protocol)"
-    },
-
-    // ========== SECTION VI: KNOWLEDGE & SATISFACTION ==========
-    "Wiedza i satysfakcja": {
-        "pl": "Wiedza i satysfakcja",
-        "en": "Knowledge and Satisfaction"
-    },
-
+    q22: { pl: "Co musiałoby się zmienić, żeby Twoja organizacja wdrożyła OpenTelemetry?", en: "What would need to change for your organization to implement OpenTelemetry?" },
+    q22_placeholder: { pl: "Opisz warunki, które musiałyby być spełnione...", en: "Describe the conditions that would need to be met..." },
+    
+    // Q23-27 Likert
+    likert1: { pl: "1 - Całkowicie bezużyteczne", en: "1 - Completely useless" },
+    likert2: { pl: "2 - Mało przydatne", en: "2 - Not very useful" },
+    likert3: { pl: "3 - Neutralne", en: "3 - Neutral" },
+    likert4: { pl: "4 - Przydatne", en: "4 - Useful" },
+    likert5: { pl: "5 - Niezwykle przydatne", en: "5 - Extremely useful" },
+    
+    q23: { pl: "Oceń przydatność śladów rozproszonych (traces) dla wykrywania i rozwiązywania incydentów:", en: "Rate the usefulness of distributed traces for incident detection and resolution:" },
+    q24: { pl: "Oceń przydatność metryk dla wykrywania i rozwiązywania incydentów:", en: "Rate the usefulness of metrics for incident detection and resolution:" },
+    q25: { pl: "Oceń przydatność logów dla wykrywania i rozwiązywania incydentów:", en: "Rate the usefulness of logs for incident detection and resolution:" },
+    q26: { pl: "Oceń przydatność korelacji między sygnałami (traces, metrics, logs):", en: "Rate the usefulness of signal correlation (traces, metrics, logs):" },
+    q27: { pl: "Oceń wartość standaryzacji danych telemetrycznych (OTLP):", en: "Rate the value of telemetry data standardization (OTLP):" },
+    
     // Q28
-    "Jak oceniasz swoją pewność w diagnozowaniu incydentów PRZED wdrożeniem OpenTelemetry?": {
-        "pl": "Jak oceniasz swoją pewność w diagnozowaniu incydentów PRZED wdrożeniem OpenTelemetry?",
-        "en": "How do you rate your confidence in diagnosing incidents BEFORE implementing OpenTelemetry?"
-    },
-    "(lub przy obecnych narzędziach, jeśli nie używasz OTel)": {
-        "pl": "(lub przy obecnych narzędziach, jeśli nie używasz OTel)",
-        "en": "(or with current tools if you don't use OTel)"
-    },
-    "Bardzo niska": {
-        "pl": "Bardzo niska",
-        "en": "Very low"
-    },
-    "Bardzo wysoka": {
-        "pl": "Bardzo wysoka",
-        "en": "Very high"
-    },
-
+    q28: { pl: "Jak pewnie czułeś/aś się w diagnozowaniu problemów PRZED wdrożeniem OpenTelemetry?", en: "How confident did you feel diagnosing problems BEFORE implementing OpenTelemetry?" },
+    q28_o1: { pl: "1 - Bardzo niepewnie", en: "1 - Very uncertain" },
+    q28_o2: { pl: "2", en: "2" },
+    q28_o3: { pl: "3 - Neutralnie", en: "3 - Neutral" },
+    q28_o4: { pl: "4", en: "4" },
+    q28_o5: { pl: "5 - Bardzo pewnie", en: "5 - Very confident" },
+    
     // Q29
-    "Jak oceniasz swoją pewność w diagnozowaniu incydentów PO wdrożeniu OpenTelemetry?": {
-        "pl": "Jak oceniasz swoją pewność w diagnozowaniu incydentów PO wdrożeniu OpenTelemetry?",
-        "en": "How do you rate your confidence in diagnosing incidents AFTER implementing OpenTelemetry?"
-    },
-
+    q29: { pl: "Jak pewnie czujesz się w diagnozowaniu problemów PO wdrożeniu OpenTelemetry?", en: "How confident do you feel diagnosing problems AFTER implementing OpenTelemetry?" },
+    q29_o1: { pl: "1 - Bardzo niepewnie", en: "1 - Very uncertain" },
+    q29_o2: { pl: "2", en: "2" },
+    q29_o3: { pl: "3 - Neutralnie", en: "3 - Neutral" },
+    q29_o4: { pl: "4", en: "4" },
+    q29_o5: { pl: "5 - Bardzo pewnie", en: "5 - Very confident" },
+    
     // Q30
-    "Jak oceniasz ogólną satysfakcję z obecnie używanych narzędzi do observability?": {
-        "pl": "Jak oceniasz ogólną satysfakcję z obecnie używanych narzędzi do observability?",
-        "en": "How satisfied are you with your current observability tools overall?"
-    },
-    "Bardzo niezadowolony/a": {
-        "pl": "Bardzo niezadowolony/a",
-        "en": "Very dissatisfied"
-    },
-    "Bardzo zadowolony/a": {
-        "pl": "Bardzo zadowolony/a",
-        "en": "Very satisfied"
-    },
-
+    q30: { pl: "Jak oceniasz ogólną satysfakcję z narzędzi observability w Twojej organizacji?", en: "How do you rate overall satisfaction with observability tools in your organization?" },
+    q30_o1: { pl: "1 - Bardzo niezadowolony/a", en: "1 - Very dissatisfied" },
+    q30_o2: { pl: "2", en: "2" },
+    q30_o3: { pl: "3 - Neutralnie", en: "3 - Neutral" },
+    q30_o4: { pl: "4", en: "4" },
+    q30_o5: { pl: "5 - Bardzo zadowolony/a", en: "5 - Very satisfied" },
+    
     // Q31
-    "Jak oceniasz dojrzałość praktyk observability w Twojej organizacji?": {
-        "pl": "Jak oceniasz dojrzałość praktyk observability w Twojej organizacji?",
-        "en": "How do you rate the maturity of observability practices in your organization?"
-    },
-    "Początkowa": {
-        "pl": "Początkowa",
-        "en": "Initial"
-    },
-    "Zaawansowana": {
-        "pl": "Zaawansowana",
-        "en": "Advanced"
-    },
-
-    // ========== SECTION VII: OPEN QUESTIONS ==========
-    "Pytania otwarte": {
-        "pl": "Pytania otwarte",
-        "en": "Open Questions"
-    },
-
+    q31: { pl: "Jak oceniasz dojrzałość praktyk observability w Twojej organizacji?", en: "How do you rate the maturity of observability practices in your organization?" },
+    q31_o1: { pl: "Początkowa", en: "Initial" },
+    q31_o1_desc: { pl: "Brak formalnych procesów", en: "No formal processes" },
+    q31_o2: { pl: "Podstawowa", en: "Basic" },
+    q31_o2_desc: { pl: "Podstawowy monitoring", en: "Basic monitoring" },
+    q31_o3: { pl: "Rozwijająca się", en: "Developing" },
+    q31_o3_desc: { pl: "Częściowa automatyzacja", en: "Partial automation" },
+    q31_o4: { pl: "Zaawansowana", en: "Advanced" },
+    q31_o4_desc: { pl: "Pełna automatyzacja, proaktywność", en: "Full automation, proactive" },
+    q31_o5: { pl: "Optymalna", en: "Optimal" },
+    q31_o5_desc: { pl: "Continuous improvement, AIOps", en: "Continuous improvement, AIOps" },
+    
     // Q32
-    "Jaka jest największa korzyść z używania obecnych narzędzi observability (w tym OpenTelemetry, jeśli dotyczy)?": {
-        "pl": "Jaka jest największa korzyść z używania obecnych narzędzi observability (w tym OpenTelemetry, jeśli dotyczy)?",
-        "en": "What is the biggest benefit of using your current observability tools (including OpenTelemetry if applicable)?"
-    },
-    "Opisz największą korzyść...": {
-        "pl": "Opisz największą korzyść...",
-        "en": "Describe the biggest benefit..."
-    },
-
+    q32: { pl: "Jaka jest według Ciebie największa korzyść z wdrożenia OpenTelemetry?", en: "In your opinion, what is the biggest benefit of implementing OpenTelemetry?" },
+    q32_hint: { pl: "(jeśli nie używasz OTel, opisz oczekiwaną korzyść)", en: "(if you don't use OTel, describe the expected benefit)" },
+    q32_placeholder: { pl: "Opisz największą korzyść...", en: "Describe the biggest benefit..." },
+    
     // Q33
-    "Jakie jest największe wyzwanie związane z observability w Twojej organizacji?": {
-        "pl": "Jakie jest największe wyzwanie związane z observability w Twojej organizacji?",
-        "en": "What is the biggest observability challenge in your organization?"
-    },
-    "Opisz największe wyzwanie...": {
-        "pl": "Opisz największe wyzwanie...",
-        "en": "Describe the biggest challenge..."
-    },
-
+    q33: { pl: "Jakie jest według Ciebie największe wyzwanie związane z OpenTelemetry?", en: "In your opinion, what is the biggest challenge related to OpenTelemetry?" },
+    q33_hint: { pl: "(wdrożenie, użytkowanie, integracja itp.)", en: "(implementation, usage, integration, etc.)" },
+    q33_placeholder: { pl: "Opisz największe wyzwanie...", en: "Describe the biggest challenge..." },
+    
     // Q34
-    "Czy masz dodatkowe uwagi lub komentarze dotyczące tematu badania?": {
-        "pl": "Czy masz dodatkowe uwagi lub komentarze dotyczące tematu badania?",
-        "en": "Do you have any additional comments about the research topic?"
-    },
-    "Dodatkowe komentarze (opcjonalnie)...": {
-        "pl": "Dodatkowe komentarze (opcjonalnie)...",
-        "en": "Additional comments (optional)..."
-    },
-
+    q34: { pl: "Czy masz dodatkowe uwagi dotyczące tematu badania?", en: "Do you have any additional comments about the research topic?" },
+    q34_placeholder: { pl: "Dodatkowe uwagi...", en: "Additional comments..." },
+    
     // Q35
-    "Jeśli chcesz otrzymać wyniki badania, podaj adres e-mail (opcjonalnie):": {
-        "pl": "Jeśli chcesz otrzymać wyniki badania, podaj adres e-mail (opcjonalnie):",
-        "en": "If you want to receive the study results, provide your email (optional):"
-    },
-    "twoj@email.com": {
-        "pl": "twoj@email.com",
-        "en": "your@email.com"
-    },
-
-    // ========== THANK YOU SCREEN ==========
-    "Dziękujemy!": {
-        "pl": "Dziękujemy!",
-        "en": "Thank you!"
-    },
-    "Twoje odpowiedzi zostały zapisane.": {
-        "pl": "Twoje odpowiedzi zostały zapisane.",
-        "en": "Your responses have been saved."
-    },
-    "Dziękujemy za udział w badaniu!": {
-        "pl": "Dziękujemy za udział w badaniu!",
-        "en": "Thank you for participating in the study!"
-    },
-    "Czas wypełnienia:": {
-        "pl": "Czas wypełnienia:",
-        "en": "Completion time:"
-    },
-    "Odpowiedzi na pytania:": {
-        "pl": "Odpowiedzi na pytania:",
-        "en": "Questions answered:"
-    },
-
-    // ========== ERROR MESSAGES ==========
-    "Wprowadź token": {
-        "pl": "Wprowadź token",
-        "en": "Enter token"
-    },
-    "Nieprawidłowy token. Sprawdź poprawność i spróbuj ponownie.": {
-        "pl": "Nieprawidłowy token. Sprawdź poprawność i spróbuj ponownie.",
-        "en": "Invalid token. Check and try again."
-    },
-    "Ten token został już wykorzystany. Każdy token może być użyty tylko raz.": {
-        "pl": "Ten token został już wykorzystany. Każdy token może być użyty tylko raz.",
-        "en": "This token has already been used. Each token can only be used once."
-    },
-    "Błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.": {
-        "pl": "Błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.",
-        "en": "Connection error. Check your internet connection and try again."
-    },
-    "To pole jest wymagane": {
-        "pl": "To pole jest wymagane",
-        "en": "This field is required"
-    },
-    "Możesz wybrać maksymalnie": {
-        "pl": "Możesz wybrać maksymalnie",
-        "en": "You can select maximum"
-    },
-    "opcje": {
-        "pl": "opcje",
-        "en": "options"
-    }
+    q35: { pl: "Adres e-mail do przesłania wyników badania", en: "Email address to receive research results" },
+    q35_hint: { pl: "(opcjonalnie)", en: "(optional)" },
+    q35_placeholder: { pl: "twoj@email.com", en: "your@email.com" }
 };
+
+// Helper function to get translation
+function getText(key) {
+    if (t[key] && t[key][currentLang]) {
+        return t[key][currentLang];
+    }
+    console.warn('Missing translation:', key, currentLang);
+    return t[key] ? (t[key]['pl'] || key) : key;
+}
+
+// Backward compatibility
+const translations = t;
