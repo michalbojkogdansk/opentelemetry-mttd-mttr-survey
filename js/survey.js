@@ -24,7 +24,7 @@ function setLanguage(lang) {
 }
 
 function translatePage() {
-    // Translate all elements with data-translate attribute
+    // Method 1: Translate elements with data-translate attribute
     document.querySelectorAll('[data-translate]').forEach(el => {
         const key = el.getAttribute('data-translate');
         if (translations[key] && translations[key][currentLang]) {
@@ -35,6 +35,91 @@ function translatePage() {
             } else {
                 el.innerHTML = translations[key][currentLang];
             }
+        }
+    });
+    
+    // Method 2: Direct text replacement for all text nodes
+    // This handles elements without data-translate attributes
+    const translateTextContent = (element) => {
+        // Skip script and style tags
+        if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE') return;
+        
+        // Process child nodes
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent.trim();
+                if (text && translations[text] && translations[text][currentLang]) {
+                    node.textContent = node.textContent.replace(text, translations[text][currentLang]);
+                }
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                // For elements with simple text content (no children or only text)
+                if (node.children.length === 0 && node.textContent.trim()) {
+                    const text = node.textContent.trim();
+                    if (translations[text] && translations[text][currentLang]) {
+                        node.textContent = translations[text][currentLang];
+                    }
+                } else {
+                    translateTextContent(node);
+                }
+            }
+        });
+    };
+    
+    // Translate the entire document body
+    translateTextContent(document.body);
+    
+    // Method 3: Translate specific labeled elements
+    // Section titles
+    document.querySelectorAll('.section-title').forEach(el => {
+        const text = el.textContent.trim();
+        if (translations[text] && translations[text][currentLang]) {
+            el.textContent = translations[text][currentLang];
+        }
+    });
+    
+    // Question labels
+    document.querySelectorAll('.question-label').forEach(el => {
+        // Get text without the question number
+        const clone = el.cloneNode(true);
+        const numSpan = clone.querySelector('.question-number');
+        if (numSpan) numSpan.remove();
+        const text = clone.textContent.trim();
+        if (translations[text] && translations[text][currentLang]) {
+            const numEl = el.querySelector('.question-number');
+            const numText = numEl ? numEl.outerHTML : '';
+            el.innerHTML = numText + ' ' + translations[text][currentLang];
+        }
+    });
+    
+    // Option labels
+    document.querySelectorAll('.option-card span, .option-item span:not(.checkmark)').forEach(el => {
+        const text = el.textContent.trim();
+        if (translations[text] && translations[text][currentLang]) {
+            el.textContent = translations[text][currentLang];
+        }
+    });
+    
+    // Select options
+    document.querySelectorAll('select option').forEach(el => {
+        const text = el.textContent.trim();
+        if (translations[text] && translations[text][currentLang]) {
+            el.textContent = translations[text][currentLang];
+        }
+    });
+    
+    // Placeholders
+    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+        const text = el.placeholder.trim();
+        if (translations[text] && translations[text][currentLang]) {
+            el.placeholder = translations[text][currentLang];
+        }
+    });
+    
+    // Hints and help text
+    document.querySelectorAll('.question-hint, .option-hint, p').forEach(el => {
+        const text = el.textContent.trim();
+        if (translations[text] && translations[text][currentLang]) {
+            el.textContent = translations[text][currentLang];
         }
     });
     
@@ -51,14 +136,13 @@ function translatePage() {
     
     // Update progress text (inline, as updateProgress is scoped to initSurvey)
     const progressTextEl = document.getElementById('progressText');
-    if (progressTextEl && progressTextEl.textContent) {
+    const progressFillEl = document.getElementById('progressFill');
+    if (progressTextEl && progressTextEl.textContent && progressFillEl) {
         const match = progressTextEl.textContent.match(/(\d+).*?(\d+)/);
         if (match) {
-            const current = match[1];
-            const total = match[2];
             progressTextEl.textContent = currentLang === 'pl' 
-                ? `Sekcja ${current} z ${total}` 
-                : `Section ${current} of ${total}`;
+                ? `Sekcja ${match[1]} z ${match[2]}`
+                : `Section ${match[1]} of ${match[2]}`;
         }
     }
 }
