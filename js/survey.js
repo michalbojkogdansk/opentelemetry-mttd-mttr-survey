@@ -49,8 +49,18 @@ function translatePage() {
     if (submitBtn && !submitBtn.disabled) submitBtn.textContent = currentLang === 'pl' ? 'Wyślij odpowiedzi' : 'Submit answers';
     if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
     
-    // Update progress text
-    updateProgress();
+    // Update progress text (inline, as updateProgress is scoped to initSurvey)
+    const progressTextEl = document.getElementById('progressText');
+    if (progressTextEl && progressTextEl.textContent) {
+        const match = progressTextEl.textContent.match(/(\d+).*?(\d+)/);
+        if (match) {
+            const current = match[1];
+            const total = match[2];
+            progressTextEl.textContent = currentLang === 'pl' 
+                ? `Sekcja ${current} z ${total}` 
+                : `Section ${current} of ${total}`;
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
