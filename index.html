@@ -5,39 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ankieta: OpenTelemetry - MTTD/MTTR</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/lang-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="lang-pl">
-
-    <!-- Language Selector Screen -->
-    <div id="langScreen" class="lang-screen">
-        <div class="lang-container">
-            <div class="lang-icon">🌐</div>
-            <h2>Wybierz język / Choose language</h2>
-            <div class="lang-buttons">
-                <button type="button" class="lang-btn" onclick="selectLanguage('pl')">
-                    <span class="lang-flag">🇵🇱</span>
-                    <span class="lang-name">Polski</span>
-                </button>
-                <button type="button" class="lang-btn" onclick="selectLanguage('en')">
-                    <span class="lang-flag">🇬🇧</span>
-                    <span class="lang-name">English</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Language Toggle Button (visible after selection) -->
-    <button type="button" id="langToggle" class="lang-toggle" style="display: none;" onclick="toggleLanguage()">
-        <span class="flag" id="currentFlag">🇵🇱</span>
-        <span id="currentLang">PL</span>
-    </button>
-
-
+<body>
     <!-- Token Validation Screen -->
-    <div id="tokenScreen" class="token-screen" style="display: none;">
+    <div id="tokenScreen" class="token-screen">
         <div class="token-container">
             <div class="token-icon">🔐</div>
             <h2>Weryfikacja dostępu</h2>
@@ -1429,6 +1402,5 @@
     </div>
 
     <script src="js/survey.js"></script>
-    <script src="js/translations.js"></script>
 </body>
 </html>
