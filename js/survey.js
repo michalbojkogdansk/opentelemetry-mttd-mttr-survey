@@ -829,6 +829,12 @@ function restoreAnswers() {
         }
     });
     
+    // Update isOtelUser from saved q7 answer
+    if (answers.q7) {
+        const otelStatuses = [getText('q7_o1'), getText('q7_o2')];
+        isOtelUser = otelStatuses.includes(answers.q7);
+    }
+    
     // Show/hide OTel-dependent questions
     updateOtelVisibility();
 }
@@ -964,6 +970,12 @@ function attachEventListeners() {
 }
 
 function updateOtelVisibility() {
+    // Update isOtelUser from saved q7 answer
+    if (answers.q7) {
+        const otelStatuses = [getText('q7_o1'), getText('q7_o2')];
+        isOtelUser = otelStatuses.includes(answers.q7);
+    }
+    
     // Show/hide OTel-dependent questions in section 2
     document.querySelectorAll('.otel-enabled').forEach(el => {
         el.style.display = isOtelUser ? 'block' : 'none';
