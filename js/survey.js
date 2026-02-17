@@ -616,7 +616,6 @@ function renderSection5() {
                     ${likertScale.map((lk, i) => `
                         <label class="radio-option likert-${i+1}">
                             <input type="radio" name="q${qNum}" value="${i+1}" required>
-                            <span class="likert-number">${i+1}</span>
                             <span class="likert-label">${getText(lk)}</span>
                         </label>
                     `).join('')}
