@@ -890,4 +890,9 @@ const translations = {
     "Badanie naukowe | 2026": { "pl": "Badanie naukowe | 2026", "en": "Research study | 2026" },
     "privacy-note": { "pl": "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", "en": "🔒 The survey is anonymous. Data is used exclusively for research purposes." },
     "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.": { "pl": "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", "en": "🔒 The survey is anonymous. Data is used exclusively for research purposes." }
+,
+    "Wprowadź token (np. AUGP-2026-XXXXXX)": { "pl": "Wprowadź token (np. AUGP-2026-XXXXXX)", "en": "Enter your token (e.g. AUGP-2026-XXXXXX)" },
+    "np. 15": { "pl": "np. 15", "en": "e.g. 15" },
+    "np. 60": { "pl": "np. 60", "en": "e.g. 60" },
+    "Dodatkowe uwagi...": { "pl": "Dodatkowe uwagi...", "en": "Additional comments..." }
 };
