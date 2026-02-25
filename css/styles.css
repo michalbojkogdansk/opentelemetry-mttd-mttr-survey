@@ -38,7 +38,7 @@
    UTILITY CLASSES
    ========================================== */
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 .validation-message {
