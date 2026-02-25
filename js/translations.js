@@ -861,4 +861,22 @@ const translations = {
         "en": "characters"
     },
 
+
+    "Akronim MTTR ma trzy możliwe interpretacje:": { "pl": "Akronim MTTR ma trzy możliwe interpretacje:", "en": "The MTTR acronym has three possible interpretations:" },
+    "– czas samej naprawy (bez diagnostyki)": { "pl": "– czas samej naprawy (bez diagnostyki)", "en": "– time of the repair itself (excluding diagnostics)" },
+    "– od wykrycia do pełnego przywrócenia usługi": { "pl": "– od wykrycia do pełnego przywrócenia usługi", "en": "– from detection to full service restoration" },
+    "– cały cykl życia incydentu (włącznie z post-mortem)": { "pl": "– cały cykl życia incydentu (włącznie z post-mortem)", "en": "– full incident lifecycle (including post-mortem)" },
+    "– czyli czas od wykrycia incydentu do pełnego przywrócenia usługi do stanu operacyjnego.": { "pl": "– czyli czas od wykrycia incydentu do pełnego przywrócenia usługi do stanu operacyjnego. Ta interpretacja bezpośrednio przekłada się na czas niedostępności odczuwany przez użytkowników.", "en": "– time from incident detection to full service restoration to operational state. This interpretation directly translates to downtime experienced by users." },
+    "Podstawowa": { "pl": "Podstawowa", "en": "Basic" },
+    "Rozwijająca się": { "pl": "Rozwijająca się", "en": "Developing" },
+    "Optymalna": { "pl": "Optymalna", "en": "Optimizing" },
+    "Brak formalnych procesów": { "pl": "Brak formalnych procesów", "en": "No formal processes" },
+    "Podstawowy monitoring": { "pl": "Podstawowy monitoring", "en": "Basic monitoring" },
+    "Częściowa automatyzacja": { "pl": "Częściowa automatyzacja", "en": "Partial automation" },
+    "Pełna automatyzacja, proaktywność": { "pl": "Pełna automatyzacja, proaktywność", "en": "Full automation, proactivity" },
+    "Continuous improvement, AIOps": { "pl": "Ciągłe doskonalenie, AIOps", "en": "Continuous improvement, AIOps" },
+    "Twoje odpowiedzi zostały zapisane i pomogą w realizacji badania naukowego.": { "pl": "Twoje odpowiedzi zostały zapisane i pomogą w realizacji badania naukowego.", "en": "Your responses have been saved and will contribute to the research study." },
+    "czas wypełnienia": { "pl": "czas wypełnienia", "en": "completion time" },
+    "odpowiedzi": { "pl": "odpowiedzi", "en": "answers" },
+    "Jeśli podałeś/aś adres e-mail, otrzymasz podsumowanie wyników po zakończeniu badania.": { "pl": "Jeśli podałeś/aś adres e-mail, otrzymasz podsumowanie wyników po zakończeniu badania.", "en": "If you provided an email address, you will receive a summary of results after the study is complete." },
 };
