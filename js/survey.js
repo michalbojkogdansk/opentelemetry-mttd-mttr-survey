@@ -23,73 +23,39 @@ function setLanguage(lang) {
     translatePage();
 }
 
-// Store original Polish text for each node so we can switch back and forth
-const _origTextMap = new Map();
-let _origNodeCounter = 0;
+// Simple, reliable translation using data-t attributes
+function getText(key) {
+    const t = translations[key];
+    return (t && t[currentLang]) ? t[currentLang] : key;
+}
 
 function translatePage() {
-    // Walk all text nodes in the body and translate using translations.js
-    walkAndTranslate(document.body);
-
-    // Handle input placeholders
-    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
-        // Store original placeholder on first call
-        if (!el.dataset.origPlaceholder) {
-            el.dataset.origPlaceholder = el.getAttribute('placeholder');
-        }
-        const origPh = el.dataset.origPlaceholder;
-        const t = translations[origPh];
-        if (t && t[currentLang]) {
-            el.setAttribute('placeholder', t[currentLang]);
-        }
+    // Translate all elements with data-t attribute
+    document.querySelectorAll('[data-t]').forEach(el => {
+        el.textContent = getText(el.dataset.t);
     });
 
-    // Update fixed button texts
+    // Handle input placeholders (stored as data-placeholder-t)
+    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+        if (!el.dataset.placeholderT) {
+            el.dataset.placeholderT = el.getAttribute('placeholder');
+        }
+        el.setAttribute('placeholder', getText(el.dataset.placeholderT));
+    });
+
+    // Update navigation buttons (no data-t, managed by JS)
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
     const validateTokenBtn = document.getElementById('validateTokenBtn');
 
-    if (prevBtn) prevBtn.textContent = currentLang === 'pl' ? 'Wstecz' : 'Back';
-    if (nextBtn) nextBtn.textContent = currentLang === 'pl' ? 'Dalej' : 'Next';
-    if (submitBtn && !submitBtn.disabled) submitBtn.textContent = currentLang === 'pl' ? 'Wyślij odpowiedzi' : 'Submit answers';
-    if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
+    if (prevBtn) prevBtn.textContent = getText('Wstecz');
+    if (nextBtn) nextBtn.textContent = getText('Dalej');
+    if (submitBtn && !submitBtn.disabled) submitBtn.textContent = getText('Wyślij odpowiedzi');
+    if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = getText('Weryfikuj');
 
     // Update progress text (guard: function defined inside DOMContentLoaded)
     if (typeof updateProgress === 'function') updateProgress();
-}
-
-function walkAndTranslate(node) {
-    if (!node) return;
-
-    if (node.nodeType === Node.TEXT_NODE) {
-        const trimmed = node.textContent.trim();
-        if (!trimmed) return;
-
-        // Store original Polish text on first encounter using a unique key
-        if (!node._tlId) {
-            node._tlId = ++_origNodeCounter;
-            _origTextMap.set(node._tlId, node.textContent);
-        }
-
-        const origText = _origTextMap.get(node._tlId).trim();
-        const t = translations[origText];
-        if (t && t[currentLang]) {
-            // Preserve surrounding whitespace
-            const leading  = node.textContent.match(/^\s*/)[0];
-            const trailing = node.textContent.match(/\s*$/)[0];
-            node.textContent = leading + t[currentLang] + trailing;
-        }
-        return;
-    }
-
-    if (node.nodeType !== Node.ELEMENT_NODE) return;
-
-    const tag = node.tagName;
-    // Skip scripts and styles
-    if (['SCRIPT', 'STYLE'].includes(tag)) return;
-
-    node.childNodes.forEach(child => walkAndTranslate(child));
 }
 
 document.addEventListener('DOMContentLoaded', function() {
