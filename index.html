@@ -7,10 +7,29 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Ankieta: OpenTelemetry - MTTD/MTTR</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/lang-styles.css">
 </head>
 <body>
+    <!-- Language Selection Screen -->
+    <div id="langScreen" class="lang-screen">
+        <div class="lang-container">
+            <div class="lang-icon">🌐</div>
+            <h2>Wybierz język ankiety<br><span class="lang-subtitle">Choose survey language</span></h2>
+            <div class="lang-buttons">
+                <button type="button" id="langPL" class="lang-btn">
+                    <span class="lang-flag">🇵🇱</span>
+                    <span class="lang-name">Polski</span>
+                </button>
+                <button type="button" id="langEN" class="lang-btn">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-name">English</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Token Validation Screen -->
-    <div id="tokenScreen" class="token-screen">
+    <div id="tokenScreen" class="token-screen hidden">
         <div class="token-container">
             <div class="token-icon">🔐</div>
             <h2>Weryfikacja dostępu</h2>
