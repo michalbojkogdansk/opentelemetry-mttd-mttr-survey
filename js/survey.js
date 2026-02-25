@@ -1,50 +1,20 @@
 /**
- * OpenTelemetry MTTD/MTTR Survey
- * With full bilingual support (PL/EN)
+ * OpenTelemetry Survey - JavaScript Logic
+ * Handles language selection, token validation, conditional logic, navigation, and form submission
  */
 
+// ==========================================
 // Configuration
-const API_URL = 'https://wild-block-e91fsurvey-api.michal-bojko-gdansk.workers.dev';
+// ==========================================
+const CONFIG = {
+    WORKER_URL: 'https://wild-block-e91fsurvey-api.michal-bojko-gdansk.workers.dev',
+    DEBUG: false
+};
+
+// ==========================================
+// Language System
+// ==========================================
 let currentLang = 'pl';
-let currentSection = 0;
-let isOtelUser = false;
-let isAmateur = false;
-let validatedToken = null;
-
-// ========== TRANSLATION HELPERS ==========
-function getText(key) {
-    if (t[key] && t[key][currentLang]) {
-        return t[key][currentLang];
-    }
-    console.warn('Missing translation:', key);
-    return t[key] ? (t[key]['pl'] || key) : key;
-}
-
-function translatePage() {
-    // Translate all elements with data-t attribute
-    document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-        const text = getText(key);
-        if (el.tagName === 'INPUT' && el.type === 'submit') {
-            el.value = text;
-        } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.placeholder = text;
-        } else {
-            el.textContent = text;
-        }
-    });
-    
-    // Update progress text if visible
-    const progressText = document.getElementById('progressText');
-    if (progressText && currentSection > 0) {
-        progressText.textContent = `${getText('sectionOf')} ${currentSection} ${getText('of')} 7`;
-    }
-    
-    // Re-render current section if survey started
-    if (currentSection > 0) {
-        renderSection(currentSection);
-    }
-}
 
 function setLanguage(lang) {
     currentLang = lang;
@@ -53,1033 +23,917 @@ function setLanguage(lang) {
     translatePage();
 }
 
-// ========== INITIALIZATION ==========
+function translatePage() {
+    // Translate all elements with data-translate attribute
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[key] && translations[key][currentLang]) {
+            if (el.tagName === 'INPUT' && el.type === 'submit') {
+                el.value = translations[key][currentLang];
+            } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = translations[key][currentLang];
+            } else {
+                el.innerHTML = translations[key][currentLang];
+            }
+        }
+    });
+    
+    // Update button texts
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const validateTokenBtn = document.getElementById('validateTokenBtn');
+    
+    if (prevBtn) prevBtn.textContent = currentLang === 'pl' ? 'Wstecz' : 'Back';
+    if (nextBtn) nextBtn.textContent = currentLang === 'pl' ? 'Dalej' : 'Next';
+    if (submitBtn && !submitBtn.disabled) submitBtn.textContent = currentLang === 'pl' ? 'Wyślij odpowiedzi' : 'Submit answers';
+    if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
+    
+    // Update progress text
+    updateProgress();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Survey loaded');
-    
-    // Check for saved language
-    const savedLang = localStorage.getItem('surveyLang');
-    if (savedLang) currentLang = savedLang;
-    
-    // Language selection buttons
-    const langPLBtn = document.getElementById('langPL');
-    const langENBtn = document.getElementById('langEN');
-    const langScreen = document.getElementById('langScreen');
+    // Language selection handling
+    let currentLanguage = 'pl';
+    const languageScreen = document.getElementById('languageScreen');
     const tokenScreen = document.getElementById('tokenScreen');
     
+    // Show language screen first, hide others
+    if (languageScreen) {
+        languageScreen.style.display = 'flex';
+        if (tokenScreen) tokenScreen.style.display = 'none';
+    }
+    
+    // Language button handlers
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentLanguage = this.dataset.lang;
+            document.documentElement.lang = currentLanguage;
+            
+            // Hide language screen, show token screen
+            if (languageScreen) languageScreen.style.display = 'none';
+            if (tokenScreen) tokenScreen.style.display = 'flex';
+            
+            // Apply translations
+            if (typeof applyTranslations === 'function') {
+                applyTranslations(currentLanguage);
+            }
+        });
+    });
+
+    // ==========================================
+    // Language Selection
+    // ==========================================
+    const langScreen = document.getElementById('langScreen');
+    const langPLBtn = document.getElementById('langPL');
+    const langENBtn = document.getElementById('langEN');
+    const tokenScreen = document.getElementById('tokenScreen');
+    
+    // Check URL for language parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+    if (urlLang && ['pl', 'en'].includes(urlLang)) {
+        currentLang = urlLang;
+    } else {
+        // Check localStorage
+        const savedLang = localStorage.getItem('surveyLang');
+        if (savedLang && ['pl', 'en'].includes(savedLang)) {
+            currentLang = savedLang;
+        }
+    }
+    
+    // Language button handlers
     if (langPLBtn) {
-        langPLBtn.addEventListener('click', () => {
-            console.log('🇵🇱 Polski selected');
+        langPLBtn.addEventListener('click', function() {
             setLanguage('pl');
-            langScreen.style.display = 'none';
-            tokenScreen.style.display = 'block';
+            showTokenScreen();
         });
     }
     
     if (langENBtn) {
-        langENBtn.addEventListener('click', () => {
-            console.log('🇬🇧 English selected');
+        langENBtn.addEventListener('click', function() {
             setLanguage('en');
-            langScreen.style.display = 'none';
-            tokenScreen.style.display = 'block';
+            showTokenScreen();
         });
     }
     
-    // Language switcher in header
-    const langSwitcher = document.getElementById('langSwitcher');
-    if (langSwitcher) {
-        langSwitcher.addEventListener('click', () => {
-            setLanguage(currentLang === 'pl' ? 'en' : 'pl');
-        });
-    }
-    
-    // Token form
-    const tokenForm = document.getElementById('tokenForm');
-    if (tokenForm) {
-        tokenForm.addEventListener('submit', handleTokenSubmit);
-    }
-    
-    // Check URL for token
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken = urlParams.get('token');
-    if (urlToken) {
-        document.getElementById('tokenInput').value = urlToken;
-    }
-    
-    // Initial translation
-    translatePage();
-});
-
-// ========== TOKEN VALIDATION ==========
-async function handleTokenSubmit(e) {
-    e.preventDefault();
-    const token = document.getElementById('tokenInput').value.trim().toUpperCase();
-    const errorEl = document.getElementById('tokenError');
-    const btn = e.target.querySelector('button');
-    
-    if (!token) {
-        errorEl.textContent = getText('errRequired');
-        errorEl.style.display = 'block';
-        return;
-    }
-    
-    btn.disabled = true;
-    btn.textContent = '...';
-    errorEl.style.display = 'none';
-    
-    try {
-        const response = await fetch(`${API_URL}/validate?token=${encodeURIComponent(token)}`);
-        const data = await response.json();
+    function showTokenScreen() {
+        if (langScreen) langScreen.style.display = 'none';
+        if (tokenScreen) tokenScreen.style.display = 'flex';
+        translatePage();
         
-        if (data.valid) {
-            validatedToken = token;
-            isAmateur = data.group === 'amateur';
-            startSurvey();
-        } else {
-            errorEl.textContent = getText('errInvalidToken');
-            errorEl.style.display = 'block';
+        // If token in URL, auto-validate
+        const urlToken = urlParams.get('token');
+        if (urlToken) {
+            tokenInput.value = urlToken;
+            validateToken(urlToken);
         }
-    } catch (err) {
-        console.error('Validation error:', err);
-        errorEl.textContent = getText('errSubmit');
-        errorEl.style.display = 'block';
     }
     
-    btn.disabled = false;
-    btn.textContent = getText('verifyBtn');
-}
+    // ==========================================
+    // State Management
+    // ==========================================
+    const state = {
+        currentSection: 1,
+        totalSections: 7,
+        startTime: null,
+        otelStatus: null,
+        shortExperience: false,
+        collectsMttdMttr: true,
+        token: null,
+        tokenValidated: false
+    };
 
-// ========== SURVEY RENDERING ==========
-function startSurvey() {
-    document.getElementById('tokenScreen').style.display = 'none';
-    document.getElementById('surveyContainer').style.display = 'block';
-    document.getElementById('progressBar').style.display = 'block';
+    // ==========================================
+    // DOM Elements
+    // ==========================================
+    const surveyContainer = document.getElementById('surveyContainer');
+    const tokenInput = document.getElementById('tokenInput');
+    const validateTokenBtn_el = document.getElementById('validateTokenBtn');
+    const tokenError = document.getElementById('tokenError');
     
-    currentSection = 1;
-    renderSection(1);
-    updateProgress();
-}
+    const form = document.getElementById('surveyForm');
+    const sections = document.querySelectorAll('.survey-section');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankYouScreen = document.getElementById('thankYouScreen');
 
-function updateProgress() {
-    const fill = document.getElementById('progressFill');
-    const text = document.getElementById('progressText');
-    if (fill) fill.style.width = `${(currentSection / 7) * 100}%`;
-    if (text) text.textContent = `${getText('sectionOf')} ${currentSection} ${getText('of')} 7`;
-}
+    // ==========================================
+    // Token Validation
+    // ==========================================
+    initTokenValidation();
 
-function renderSection(sectionNum) {
-    const container = document.getElementById('surveyContainer');
-    let html = '';
-    
-    switch(sectionNum) {
-        case 1: html = renderSection1(); break;
-        case 2: html = renderSection2(); break;
-        case 3: html = renderSection3(); break;
-        case 4: html = renderSection4(); break;
-        case 5: html = renderSection5(); break;
-        case 6: html = renderSection6(); break;
-        case 7: html = renderSection7(); break;
-    }
-    
-    container.innerHTML = html;
-    attachEventListeners();
-    restoreAnswers();
-    window.scrollTo(0, 0);
-}
+    function initTokenValidation() {
+        // Check for token in URL (if language was already selected via URL)
+        const urlToken = urlParams.get('token');
+        
+        // If both lang and token in URL, skip language screen
+        if (urlLang && urlToken) {
+            if (langScreen) langScreen.style.display = 'none';
+            if (tokenScreen) tokenScreen.style.display = 'flex';
+            tokenInput.value = urlToken;
+            translatePage();
+            validateToken(urlToken);
+        }
 
-// ========== SECTION RENDERERS ==========
-function sectionHeader(num, key) {
-    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-    return `<div class="section-header">
-        <span class="section-number">${romans[num-1]}</span>
-        <h2>${getText(key)}</h2>
-    </div>`;
-}
-
-function radioQuestion(qNum, key, options, required = true) {
-    let html = `<div class="question" id="q${qNum}">
-        <label class="question-label">
-            <span class="question-number">${qNum}.</span>
-            ${getText(key)} ${required ? '<span class="required">*</span>' : ''}
-        </label>
-        <div class="options">`;
-    
-    options.forEach((opt, i) => {
-        const optKey = `${key.replace('q', 'q')}_o${i+1}`;
-        html += `<label class="radio-option">
-            <input type="radio" name="q${qNum}" value="${opt.value || getText(optKey)}" ${required ? 'required' : ''}>
-            <span class="radio-label">${getText(optKey)}</span>
-        </label>`;
-    });
-    
-    html += `</div></div>`;
-    return html;
-}
-
-function renderSection1() {
-    return `
-        ${sectionHeader(1, 'sec1')}
-        
-        <div class="question" id="q1">
-            <label class="question-label">
-                <span class="question-number">1.</span>
-                ${getText('q1')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q1_o1','q1_o2','q1_o3','q1_o4','q1_o5','q1_o6'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q1" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question" id="q2">
-            <label class="question-label">
-                <span class="question-number">2.</span>
-                ${getText('q2')} <span class="required">*</span>
-            </label>
-            <select name="q2" id="q2Select" required>
-                <option value="">${getText('q2_placeholder')}</option>
-                ${['q2_o1','q2_o2','q2_o3','q2_o4','q2_o5','q2_o6','q2_o7','q2_o8','q2_o9','q2_o10'].map(k => `
-                    <option value="${getText(k)}">${getText(k)}</option>
-                `).join('')}
-            </select>
-            <input type="text" id="q2Other" name="q2_other" placeholder="${getText('q2_other')}" style="display:none; margin-top:10px;">
-        </div>
-        
-        <div class="question" id="q3">
-            <label class="question-label">
-                <span class="question-number">3.</span>
-                ${getText('q3')} <span class="required">*</span>
-            </label>
-            <select name="q3" id="q3Select" required>
-                <option value="">${getText('q3_placeholder')}</option>
-                ${['q3_o1','q3_o2','q3_o3','q3_o4','q3_o5','q3_o6','q3_o7','q3_o8','q3_o9'].map(k => `
-                    <option value="${getText(k)}">${getText(k)}</option>
-                `).join('')}
-            </select>
-            <input type="text" id="q3Other" name="q3_other" placeholder="${getText('q3_other')}" style="display:none; margin-top:10px;">
-        </div>
-        
-        <div class="question" id="q4">
-            <label class="question-label">
-                <span class="question-number">4.</span>
-                ${getText('q4')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q4_o1','q4_o2','q4_o3','q4_o4','q4_o5'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q4" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question" id="q5">
-            <label class="question-label">
-                <span class="question-number">5.</span>
-                ${getText('q5')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q5_o1','q5_o2','q5_o3','q5_o4','q5_o5','q5_o6'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q5" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        ${navButtons(false, true)}
-    `;
-}
-
-function renderSection2() {
-    return `
-        ${sectionHeader(2, 'sec2')}
-        
-        <div class="question" id="q6">
-            <label class="question-label">
-                <span class="question-number">6.</span>
-                ${getText('q6')} <span class="required">*</span>
-            </label>
-            <p class="hint">${getText('q6_hint')}</p>
-            <div class="options checkbox-options">
-                ${['q6_o1','q6_o2','q6_o3','q6_o4','q6_o5','q6_o6','q6_o7','q6_o8','q6_o9','q6_o10','q6_o11','q6_o12'].map(k => `
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="q6" value="${getText(k)}">
-                        <span class="checkbox-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-            <input type="text" id="q6Other" name="q6_other" placeholder="${getText('q6_other')}" style="display:none; margin-top:10px;">
-        </div>
-        
-        <div class="question" id="q7">
-            <label class="question-label">
-                <span class="question-number">7.</span>
-                ${getText('q7')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q7_o1','q7_o2','q7_o3','q7_o4','q7_o5','q7_o6'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q7" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question otel-enabled" id="q8" style="display:none;">
-            <label class="question-label">
-                <span class="question-number">8.</span>
-                ${getText('q8')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q8_o1','q8_o2','q8_o3','q8_o4','q8_o5'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q8" value="${getText(k)}">
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question otel-enabled" id="q9" style="display:none;">
-            <label class="question-label">
-                <span class="question-number">9.</span>
-                ${getText('q9')} <span class="required">*</span>
-            </label>
-            <p class="hint">${getText('q9_hint')}</p>
-            <div class="options checkbox-options">
-                ${['q9_o1','q9_o2','q9_o3','q9_o4','q9_o5','q9_o6'].map(k => `
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="q9" value="${getText(k)}">
-                        <span class="checkbox-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        ${navButtons(true, true)}
-    `;
-}
-
-function renderSection3() {
-    const mttrInfo = `
-        <div class="mttr-info">
-            <div class="info-icon">ℹ</div>
-            <div class="info-content">
-                <strong>${getText('mttrInfoTitle')}</strong> ${getText('mttrInfoIntro')}
-                <ul>
-                    <li><strong>Mean Time To Repair</strong> – ${getText('mttrRepair')}</li>
-                    <li><strong>Mean Time To Recovery</strong> – ${getText('mttrRecovery')}</li>
-                    <li><strong>Mean Time To Resolve</strong> – ${getText('mttrResolve')}</li>
-                </ul>
-                <p class="mttr-used">${getText('mttrUsed')}</p>
-            </div>
-        </div>
-    `;
-    
-    const amateurNotice = isAmateur ? `
-        <div class="info-box amateur-info">
-            <div class="info-icon">ℹ</div>
-            <span>${getText('amateurInfo')}</span>
-        </div>
-    ` : '';
-    
-    return `
-        ${sectionHeader(3, 'sec3')}
-        ${mttrInfo}
-        ${amateurNotice}
-        
-        <div class="question" id="q10">
-            <label class="question-label">
-                <span class="question-number">10.</span>
-                ${getText('q10')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q10_o1','q10_o2','q10_o3','q10_o4'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q10" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question" id="q11">
-            <label class="question-label">
-                <span class="question-number">11.</span>
-                ${getText('q11')}
-            </label>
-            <p class="hint">${getText('q11_hint')}</p>
-            <div class="number-input-group">
-                <input type="number" name="q11" min="0" max="10080" placeholder="${getText('q11_placeholder')}">
-                <span class="unit">${getText('minutes')}</span>
-            </div>
-            <p class="range-hint">${getText('q11_range')}</p>
-        </div>
-        
-        <div class="question" id="q12">
-            <label class="question-label">
-                <span class="question-number">12.</span>
-                ${getText('q12')} <br><small>${getText('q12_note')}</small>
-            </label>
-            <p class="hint">${getText('q12_hint')}</p>
-            <div class="number-input-group">
-                <input type="number" name="q12" min="0" max="43200" placeholder="${getText('q12_placeholder')}">
-                <span class="unit">${getText('minutes')}</span>
-            </div>
-            <p class="range-hint">${getText('q12_range')}</p>
-        </div>
-        
-        <div class="question" id="q13">
-            <label class="question-label">
-                <span class="question-number">13.</span>
-                ${getText('q13')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q13_o1','q13_o2','q13_o3','q13_o4'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q13" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question" id="q14">
-            <label class="question-label">
-                <span class="question-number">14.</span>
-                ${getText('q14')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q14_o1','q14_o2','q14_o3','q14_o4','q14_o5','q14_o6'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q14" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        ${navButtons(true, true)}
-    `;
-}
-
-function renderSection4() {
-    const otelQuestions = `
-        <div class="question otel-only" id="q15">
-            <label class="question-label">
-                <span class="question-number">15.</span>
-                ${getText('q15')} <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q15_o1','q15_o2','q15_o3','q15_o4','q15_o5','q15_o6'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q15" value="${getText(k)}">
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question otel-only" id="q16">
-            <label class="question-label">
-                <span class="question-number">16.</span>
-                ${getText('q16')} <br><small>${getText('q16_note')}</small> <span class="required">*</span>
-            </label>
-            <div class="options">
-                ${['q16_o1','q16_o2','q16_o3','q16_o4','q16_o5','q16_o6'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q16" value="${getText(k)}">
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question otel-only" id="q17">
-            <label class="question-label">
-                <span class="question-number">17.</span>
-                ${getText('q17')}
-            </label>
-            <p class="hint">${getText('q17_hint')}</p>
-            <div class="slider-container">
-                <input type="range" name="q17" min="0" max="100" value="0" class="slider">
-                <span class="slider-value">0%</span>
-            </div>
-        </div>
-        
-        <div class="question otel-only" id="q18">
-            <label class="question-label">
-                <span class="question-number">18.</span>
-                ${getText('q18')} <br><small>${getText('q18_note')}</small>
-            </label>
-            <p class="hint">${getText('q18_hint')}</p>
-            <div class="slider-container">
-                <input type="range" name="q18" min="0" max="100" value="0" class="slider">
-                <span class="slider-value">0%</span>
-            </div>
-        </div>
-        
-        <div class="question otel-only" id="q19">
-            <label class="question-label">
-                <span class="question-number">19.</span>
-                ${getText('q19')}
-            </label>
-            <p class="hint">${getText('q19_hint')}</p>
-            <div class="ranking-list" id="rankingList">
-                ${['q19_o1','q19_o2','q19_o3','q19_o4','q19_o5'].map((k, i) => `
-                    <div class="ranking-item" draggable="true" data-value="${getText(k)}">
-                        <span class="rank-number">${i+1}</span>
-                        <span class="rank-text">${getText(k)}</span>
-                        <span class="drag-handle">⋮⋮</span>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    
-    const nonOtelQuestions = `
-        <div class="question non-otel-only" id="q20">
-            <label class="question-label">
-                <span class="question-number">20.</span>
-                ${getText('q20')} <span class="required">*</span>
-            </label>
-            <p class="hint">${getText('q20_hint')}</p>
-            <div class="options checkbox-options">
-                ${['q20_o1','q20_o2','q20_o3','q20_o4','q20_o5','q20_o6','q20_o7','q20_o8'].map(k => `
-                    <label class="checkbox-option">
-                        <input type="checkbox" name="q20" value="${getText(k)}">
-                        <span class="checkbox-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-            <input type="text" id="q20Other" name="q20_other" placeholder="${getText('q20_other')}" style="display:none; margin-top:10px;">
-        </div>
-        
-        <div class="question non-otel-only" id="q21">
-            <label class="question-label">
-                <span class="question-number">21.</span>
-                ${getText('q21')} <span class="required">*</span>
-            </label>
-            <div class="options likert-options">
-                ${['q21_o1','q21_o2','q21_o3','q21_o4','q21_o5'].map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q21" value="${getText(k)}">
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        <div class="question non-otel-only" id="q22">
-            <label class="question-label">
-                <span class="question-number">22.</span>
-                ${getText('q22')}
-            </label>
-            <textarea name="q22" rows="4" maxlength="1000" placeholder="${getText('q22_placeholder')}"></textarea>
-            <p class="char-count"><span class="current">0</span>/1000 ${getText('characters')}</p>
-        </div>
-    `;
-    
-    return `
-        ${sectionHeader(4, 'sec4')}
-        ${isOtelUser ? otelQuestions : nonOtelQuestions}
-        ${navButtons(true, true)}
-    `;
-}
-
-function renderSection5() {
-    if (!isOtelUser) {
-        // Skip this section for non-OTel users
-        currentSection = 6;
-        renderSection(6);
-        return '';
-    }
-    
-    const likertScale = ['likert1','likert2','likert3','likert4','likert5'];
-    
-    function likertQuestion(qNum, key) {
-        return `
-            <div class="question" id="q${qNum}">
-                <label class="question-label">
-                    <span class="question-number">${qNum}.</span>
-                    ${getText(key)} <span class="required">*</span>
-                </label>
-                <div class="options likert-options">
-                    ${likertScale.map((lk, i) => `
-                        <label class="radio-option likert-${i+1}">
-                            <input type="radio" name="q${qNum}" value="${i+1}" required>
-                            <span class="likert-label">${getText(lk)}</span>
-                        </label>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-    
-    return `
-        ${sectionHeader(5, 'sec5')}
-        ${likertQuestion(23, 'q23')}
-        ${likertQuestion(24, 'q24')}
-        ${likertQuestion(25, 'q25')}
-        ${likertQuestion(26, 'q26')}
-        ${likertQuestion(27, 'q27')}
-        ${navButtons(true, true)}
-    `;
-}
-
-function renderSection6() {
-    const likertScale = (qNum, key, opts) => `
-        <div class="question" id="q${qNum}">
-            <label class="question-label">
-                <span class="question-number">${qNum}.</span>
-                ${getText(key)} <span class="required">*</span>
-            </label>
-            <div class="options likert-options">
-                ${opts.map(k => `
-                    <label class="radio-option">
-                        <input type="radio" name="q${qNum}" value="${getText(k)}" required>
-                        <span class="radio-label">${getText(k)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    
-    const q29Html = isOtelUser ? likertScale(29, 'q29', ['q29_o1','q29_o2','q29_o3','q29_o4','q29_o5']) : '';
-    
-    return `
-        ${sectionHeader(6, 'sec6')}
-        
-        ${likertScale(28, 'q28', ['q28_o1','q28_o2','q28_o3','q28_o4','q28_o5'])}
-        ${q29Html}
-        ${likertScale(30, 'q30', ['q30_o1','q30_o2','q30_o3','q30_o4','q30_o5'])}
-        
-        <div class="question" id="q31">
-            <label class="question-label">
-                <span class="question-number">31.</span>
-                ${getText('q31')} <span class="required">*</span>
-            </label>
-            <div class="options maturity-options">
-                ${[1,2,3,4,5].map(i => `
-                    <label class="radio-option maturity-option">
-                        <input type="radio" name="q31" value="${i}" required>
-                        <span class="maturity-level">${i}</span>
-                        <span class="maturity-name">${getText(`q31_o${i}`)}</span>
-                        <span class="maturity-desc">${getText(`q31_o${i}_desc`)}</span>
-                    </label>
-                `).join('')}
-            </div>
-        </div>
-        
-        ${navButtons(true, true)}
-    `;
-}
-
-function renderSection7() {
-    return `
-        ${sectionHeader(7, 'sec7')}
-        <p class="section-intro">${getText('openIntro')}</p>
-        
-        <div class="question" id="q32">
-            <label class="question-label">
-                <span class="question-number">32.</span>
-                ${getText('q32')}
-            </label>
-            <p class="hint">${getText('q32_hint')}</p>
-            <textarea name="q32" rows="4" maxlength="1000" placeholder="${getText('q32_placeholder')}"></textarea>
-            <p class="char-count"><span class="current">0</span>/1000 ${getText('characters')}</p>
-        </div>
-        
-        <div class="question" id="q33">
-            <label class="question-label">
-                <span class="question-number">33.</span>
-                ${getText('q33')}
-            </label>
-            <p class="hint">${getText('q33_hint')}</p>
-            <textarea name="q33" rows="4" maxlength="1000" placeholder="${getText('q33_placeholder')}"></textarea>
-            <p class="char-count"><span class="current">0</span>/1000 ${getText('characters')}</p>
-        </div>
-        
-        <div class="question" id="q34">
-            <label class="question-label">
-                <span class="question-number">34.</span>
-                ${getText('q34')}
-            </label>
-            <textarea name="q34" rows="3" maxlength="500" placeholder="${getText('q34_placeholder')}"></textarea>
-            <p class="char-count"><span class="current">0</span>/500 ${getText('characters')}</p>
-        </div>
-        
-        <div class="question" id="q35">
-            <label class="question-label">
-                <span class="question-number">35.</span>
-                ${getText('q35')}
-            </label>
-            <p class="hint">${getText('q35_hint')}</p>
-            <input type="email" name="q35" placeholder="${getText('q35_placeholder')}">
-        </div>
-        
-        ${navButtons(true, false, true)}
-    `;
-}
-
-function navButtons(showBack, showNext, showSubmit = false) {
-    let html = '<div class="nav-buttons">';
-    if (showBack) {
-        html += `<button type="button" class="btn btn-secondary" onclick="prevSection()">${getText('backBtn')}</button>`;
-    }
-    if (showNext) {
-        html += `<button type="button" class="btn btn-primary" onclick="nextSection()">${getText('nextBtn')}</button>`;
-    }
-    if (showSubmit) {
-        html += `<button type="button" class="btn btn-primary btn-submit" onclick="submitSurvey()">${getText('submitBtn')}</button>`;
-    }
-    html += '</div>';
-    return html;
-}
-
-// ========== NAVIGATION ==========
-const answers = {};
-
-function saveCurrentAnswers() {
-    const container = document.getElementById('surveyContainer');
-    
-    // Radio buttons
-    container.querySelectorAll('input[type="radio"]:checked').forEach(input => {
-        answers[input.name] = input.value;
-    });
-    
-    // Checkboxes
-    const checkboxGroups = {};
-    container.querySelectorAll('input[type="checkbox"]:checked').forEach(input => {
-        if (!checkboxGroups[input.name]) checkboxGroups[input.name] = [];
-        checkboxGroups[input.name].push(input.value);
-    });
-    Object.assign(answers, checkboxGroups);
-    
-    // Text inputs
-    container.querySelectorAll('input[type="text"], input[type="email"], input[type="number"]').forEach(input => {
-        if (input.value) answers[input.name] = input.value;
-    });
-    
-    // Textareas
-    container.querySelectorAll('textarea').forEach(textarea => {
-        if (textarea.value) answers[textarea.name] = textarea.value;
-    });
-    
-    // Selects
-    container.querySelectorAll('select').forEach(select => {
-        if (select.value) answers[select.name] = select.value;
-    });
-    
-    // Sliders
-    container.querySelectorAll('input[type="range"]').forEach(slider => {
-        answers[slider.name] = slider.value;
-    });
-    
-    // Check OTel status from Q7
-    if (answers.q7) {
-        const otelStatuses = [getText('q7_o1'), getText('q7_o2')];
-        isOtelUser = otelStatuses.some(s => answers.q7.includes(s) || answers.q7 === s);
-    }
-}
-
-function restoreAnswers() {
-    const container = document.getElementById('surveyContainer');
-    
-    Object.entries(answers).forEach(([name, value]) => {
-        if (Array.isArray(value)) {
-            // Checkboxes
-            value.forEach(v => {
-                const cb = container.querySelector(`input[name="${name}"][value="${v}"]`);
-                if (cb) cb.checked = true;
+        // Token validation button
+        if (validateTokenBtn_el) {
+            validateTokenBtn_el.addEventListener('click', () => {
+                const token = tokenInput.value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
+                if (token && /^[A-Z0-9-]{8,20}$/.test(token)) {
+                    validateToken(token);
+                } else {
+                    showTokenError(currentLang === 'pl' ? 'Wprowadź token' : 'Enter token');
+                }
             });
+        }
+
+        // Enter key in token input
+        if (tokenInput) {
+            tokenInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    validateTokenBtn_el.click();
+                }
+            });
+        }
+    }
+
+    async function validateToken(token) {
+        showTokenLoading(true);
+        hideTokenError();
+
+        try {
+            const response = await fetch(`${CONFIG.WORKER_URL}/validate?token=${encodeURIComponent(token)}`);
+            const data = await response.json();
+
+            if (data.valid) {
+                state.token = token;
+                state.tokenValidated = true;
+                showSurvey();
+            } else {
+                showTokenError(getTokenErrorMessage(data.error));
+            }
+        } catch (error) {
+            console.error('Token validation error:', error);
+            showTokenError(currentLang === 'pl' 
+                ? 'Błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.'
+                : 'Connection error. Check your internet connection and try again.');
+        } finally {
+            showTokenLoading(false);
+        }
+    }
+
+    function getTokenErrorMessage(error) {
+        const messages = {
+            'pl': {
+                'Token required': 'Wprowadź token',
+                'Invalid token': 'Nieprawidłowy token. Sprawdź poprawność i spróbuj ponownie.',
+                'Token already used': 'Ten token został już wykorzystany. Każdy token może być użyty tylko raz.'
+            },
+            'en': {
+                'Token required': 'Enter token',
+                'Invalid token': 'Invalid token. Check and try again.',
+                'Token already used': 'This token has already been used. Each token can only be used once.'
+            }
+        };
+        return messages[currentLang][error] || (currentLang === 'pl' ? 'Wystąpił błąd. Spróbuj ponownie.' : 'An error occurred. Try again.');
+    }
+
+    function showTokenError(message) {
+        tokenError.textContent = message;
+        tokenError.classList.add('show');
+    }
+
+    function hideTokenError() {
+        tokenError.classList.remove('show');
+    }
+
+    function showTokenLoading(loading) {
+        if (loading) {
+            validateTokenBtn_el.disabled = true;
+            validateTokenBtn_el.innerHTML = '<span class="token-loading"></span>';
         } else {
-            // Radio
-            const radio = container.querySelector(`input[type="radio"][name="${name}"][value="${value}"]`);
-            if (radio) radio.checked = true;
-            
-            // Text/number/email
-            const input = container.querySelector(`input[type="text"][name="${name}"], input[type="number"][name="${name}"], input[type="email"][name="${name}"]`);
-            if (input) input.value = value;
-            
-            // Textarea
-            const textarea = container.querySelector(`textarea[name="${name}"]`);
-            if (textarea) textarea.value = value;
-            
-            // Select
-            const select = container.querySelector(`select[name="${name}"]`);
-            if (select) select.value = value;
-            
-            // Slider
-            const slider = container.querySelector(`input[type="range"][name="${name}"]`);
-            if (slider) {
-                slider.value = value;
-                const valueDisplay = slider.parentElement.querySelector('.slider-value');
-                if (valueDisplay) valueDisplay.textContent = value + '%';
+            validateTokenBtn_el.disabled = false;
+            validateTokenBtn_el.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
+        }
+    }
+
+    function showSurvey() {
+        tokenScreen.style.display = 'none';
+        surveyContainer.style.display = 'block';
+        state.startTime = new Date();
+        init();
+        
+        // Clean URL (remove token parameter)
+        if (window.history.replaceState) {
+            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+    }
+
+    // ==========================================
+    // Survey Initialization
+    // ==========================================
+    function init() {
+        setupEventListeners();
+        setupConditionalLogic();
+        setupRanking();
+        setupCharCounters();
+        setupCheckboxLimits();
+        updateProgress();
+        showSection(1);
+    }
+
+    // ==========================================
+    // Event Listeners
+    // ==========================================
+    function setupEventListeners() {
+        // Navigation buttons
+        prevBtn.addEventListener('click', () => navigateSection(-1));
+        nextBtn.addEventListener('click', () => navigateSection(1));
+        
+        // Form submission
+        form.addEventListener('submit', handleSubmit);
+
+        // Experience question (Q1)
+        document.querySelectorAll('input[name="q1_experience"]').forEach(input => {
+            input.addEventListener('change', handleExperienceChange);
+        });
+
+        // OTel status question (Q7)
+        document.querySelectorAll('input[name="q7_otel_status"]').forEach(input => {
+            input.addEventListener('change', handleOtelStatusChange);
+        });
+
+        // Data collection question (Q10)
+        document.querySelectorAll('input[name="q10_data_collection"]').forEach(input => {
+            input.addEventListener('change', handleDataCollectionChange);
+        });
+
+        // Role dropdown (Q2)
+        document.querySelector('select[name="q2_role"]').addEventListener('change', function() {
+            toggleConditionalField('q2_other_container', this.value === 'other');
+        });
+
+        // Industry dropdown (Q3)
+        document.querySelector('select[name="q3_industry"]').addEventListener('change', function() {
+            toggleConditionalField('q3_other_container', this.value === 'other');
+        });
+
+        // Tools checkbox - Other (Q6)
+        setupCheckboxOther('q6_tools', 'other', 'q6_other_container');
+
+        // Biggest value - Other (Q19)
+        document.querySelectorAll('input[name="q19_biggest_value"]').forEach(input => {
+            input.addEventListener('change', function() {
+                toggleConditionalField('q19_other_container', this.value === 'other');
+            });
+        });
+
+        // Obstacles checkbox - Other (Q20)
+        setupCheckboxOther('q20_obstacles', 'other', 'q20_other_container');
+    }
+
+    // ==========================================
+    // Conditional Logic
+    // ==========================================
+    function setupConditionalLogic() {
+        const otelStatusValue = document.querySelector('input[name="q7_otel_status"]:checked');
+        if (otelStatusValue) {
+            handleOtelStatusChange.call(otelStatusValue);
+        }
+    }
+
+    function handleExperienceChange() {
+        const value = this.value;
+        state.shortExperience = (value === 'less_than_6m');
+        
+        const infoBox = document.getElementById('shortExperienceInfo');
+        if (infoBox) {
+            infoBox.style.display = state.shortExperience ? 'flex' : 'none';
+        }
+    }
+
+    function handleOtelStatusChange() {
+        const value = this.value;
+        const otelYesValues = ['full', 'partial', 'in_progress'];
+        state.otelStatus = otelYesValues.includes(value) ? 'yes' : 'no';
+
+        document.querySelectorAll('[data-show-if="otel_yes"]').forEach(el => {
+            el.style.display = state.otelStatus === 'yes' ? 'block' : 'none';
+        });
+
+        const otelUsersSection = document.getElementById('otelUsersSection');
+        const nonOtelUsersSection = document.getElementById('nonOtelUsersSection');
+        const otelUsabilitySection = document.getElementById('otelUsabilitySection');
+
+        if (state.otelStatus === 'yes') {
+            otelUsersSection.style.display = 'block';
+            nonOtelUsersSection.style.display = 'none';
+            otelUsabilitySection.classList.add('otel-enabled');
+        } else {
+            otelUsersSection.style.display = 'none';
+            nonOtelUsersSection.style.display = 'block';
+            otelUsabilitySection.classList.remove('otel-enabled');
+        }
+
+        updateVisibleSections();
+    }
+
+    function handleDataCollectionChange() {
+        const value = this.value;
+        state.collectsMttdMttr = !['none', 'unknown'].includes(value);
+        
+        const mttdMttrQuestions = document.getElementById('mttdMttrQuestions');
+        if (mttdMttrQuestions) {
+            mttdMttrQuestions.style.display = state.collectsMttdMttr ? 'block' : 'none';
+        }
+    }
+
+    function toggleConditionalField(containerId, show) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.style.display = show ? 'block' : 'none';
+            const input = container.querySelector('input, textarea');
+            if (input) {
+                input.required = show;
             }
         }
-    });
-    
-    // Update isOtelUser from saved q7 answer
-    if (answers.q7) {
-        const otelStatuses = [getText('q7_o1'), getText('q7_o2')];
-        isOtelUser = otelStatuses.includes(answers.q7);
     }
-    
-    // Show/hide OTel-dependent questions
-    updateOtelVisibility();
-}
 
-function validateCurrentSection() {
-    const container = document.getElementById('surveyContainer');
-    const required = container.querySelectorAll('[required]');
-    
-    for (const el of required) {
-        if (el.type === 'radio') {
-            const name = el.name;
-            const checked = container.querySelector(`input[name="${name}"]:checked`);
+    function setupCheckboxOther(name, otherValue, containerId) {
+        document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+            input.addEventListener('change', function() {
+                const otherChecked = document.querySelector(`input[name="${name}"][value="${otherValue}"]`).checked;
+                toggleConditionalField(containerId, otherChecked);
+            });
+        });
+    }
+
+    // ==========================================
+    // Navigation
+    // ==========================================
+    function navigateSection(direction) {
+        const newSection = state.currentSection + direction;
+        
+        if (direction > 0 && !validateCurrentSection()) {
+            return;
+        }
+
+        let targetSection = newSection;
+        if (state.otelStatus === 'no') {
+            if (direction > 0 && newSection === 5) {
+                targetSection = 6;
+            } else if (direction < 0 && newSection === 5) {
+                targetSection = 4;
+            }
+        }
+
+        if (targetSection >= 1 && targetSection <= state.totalSections) {
+            showSection(targetSection);
+        }
+    }
+
+    function showSection(sectionNum) {
+        sections.forEach(section => {
+            section.classList.remove('active');
+            if (!section.id || (section.id !== 'otelUsersSection' && section.id !== 'nonOtelUsersSection')) {
+                section.style.display = '';
+            }
+        });
+
+        const targetSection = document.querySelector(`[data-section="${sectionNum}"]`);
+        if (targetSection) {
+            targetSection.classList.add('active');
+            state.currentSection = sectionNum;
+        }
+
+        updateNavigationButtons();
+        updateProgress();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateNavigationButtons() {
+        const effectiveSections = getEffectiveTotalSections();
+        
+        prevBtn.style.display = state.currentSection > 1 ? 'block' : 'none';
+        
+        if (state.currentSection >= effectiveSections) {
+            nextBtn.style.display = 'none';
+            submitBtn.style.display = 'block';
+        } else {
+            nextBtn.style.display = 'block';
+            submitBtn.style.display = 'none';
+        }
+    }
+
+    function updateProgress() {
+        const effectiveSections = getEffectiveTotalSections();
+        const progress = (state.currentSection / effectiveSections) * 100;
+        if (progressFill) progressFill.style.width = `${progress}%`;
+        if (progressText) {
+            if (currentLang === 'en') {
+                progressText.textContent = `Section ${state.currentSection} of ${effectiveSections}`;
+            } else {
+                progressText.textContent = `Sekcja ${state.currentSection} z ${effectiveSections}`;
+            }
+        }
+    }
+
+    function getEffectiveTotalSections() {
+        return state.otelStatus === 'no' ? state.totalSections - 1 : state.totalSections;
+    }
+
+    function updateVisibleSections() {
+        updateNavigationButtons();
+        updateProgress();
+    }
+
+    // ==========================================
+    // Validation
+    // ==========================================
+    function validateCurrentSection() {
+        const currentSectionEl = document.querySelector(`[data-section="${state.currentSection}"]`);
+        const requiredInputs = currentSectionEl.querySelectorAll('[required]');
+        let isValid = true;
+        let firstInvalid = null;
+
+        requiredInputs.forEach(input => {
+            if (!isVisible(input)) return;
+
+            const inputValid = validateInput(input);
+            if (!inputValid && !firstInvalid) {
+                firstInvalid = input;
+            }
+            isValid = isValid && inputValid;
+        });
+
+        const checkboxGroups = currentSectionEl.querySelectorAll('.checkbox-grid[data-min], .checkbox-grid');
+        checkboxGroups.forEach(group => {
+            if (!isVisible(group)) return;
+            
+            const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            
+            const question = group.closest('.question');
+            if (question && question.querySelector('.required')) {
+                if (!anyChecked) {
+                    isValid = false;
+                    if (!firstInvalid) {
+                        firstInvalid = checkboxes[0];
+                    }
+                    highlightInvalid(group);
+                }
+            }
+        });
+
+        if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            showValidationMessage(firstInvalid);
+        }
+
+        return isValid;
+    }
+
+    function validateInput(input) {
+        if (input.type === 'radio') {
+            const name = input.name;
+            const checked = document.querySelector(`input[name="${name}"]:checked`);
             if (!checked) {
-                el.closest('.question').scrollIntoView({ behavior: 'smooth' });
-                alert(getText('errRequired'));
+                highlightInvalid(input.closest('.options-list, .options-grid, .likert-scale'));
                 return false;
             }
-        } else if (!el.value) {
-            el.scrollIntoView({ behavior: 'smooth' });
-            alert(getText('errRequired'));
+        } else if (input.type === 'number') {
+            const value = parseFloat(input.value);
+            const min = parseFloat(input.min) || 0;
+            const max = parseFloat(input.max) || Infinity;
+            
+            if (input.value !== '' && (isNaN(value) || value < min || value > max)) {
+                highlightInvalid(input);
+                return false;
+            }
+        } else if (input.value.trim() === '') {
+            highlightInvalid(input);
             return false;
         }
-    }
-    return true;
-}
-
-function nextSection() {
-    if (!validateCurrentSection()) return;
-    saveCurrentAnswers();
-    
-    currentSection++;
-    
-    // Skip section 5 for non-OTel users
-    if (currentSection === 5 && !isOtelUser) {
-        currentSection = 6;
-    }
-    
-    renderSection(currentSection);
-    updateProgress();
-}
-
-function prevSection() {
-    saveCurrentAnswers();
-    
-    currentSection--;
-    
-    // Skip section 5 for non-OTel users
-    if (currentSection === 5 && !isOtelUser) {
-        currentSection = 4;
-    }
-    
-    if (currentSection < 1) currentSection = 1;
-    renderSection(currentSection);
-    updateProgress();
-}
-
-// ========== EVENT LISTENERS ==========
-function attachEventListeners() {
-    // Q2 "Other" handling
-    const q2Select = document.getElementById('q2Select');
-    const q2Other = document.getElementById('q2Other');
-    if (q2Select && q2Other) {
-        q2Select.addEventListener('change', () => {
-            q2Other.style.display = q2Select.value === getText('q2_o10') ? 'block' : 'none';
-        });
-    }
-    
-    // Q3 "Other" handling
-    const q3Select = document.getElementById('q3Select');
-    const q3Other = document.getElementById('q3Other');
-    if (q3Select && q3Other) {
-        q3Select.addEventListener('change', () => {
-            q3Other.style.display = q3Select.value === getText('q3_o9') ? 'block' : 'none';
-        });
-    }
-    
-    // Q6 "Other" handling
-    const q6Checkboxes = document.querySelectorAll('input[name="q6"]');
-    const q6Other = document.getElementById('q6Other');
-    if (q6Other) {
-        q6Checkboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                const otherChecked = [...q6Checkboxes].some(c => c.value === getText('q6_o12') && c.checked);
-                q6Other.style.display = otherChecked ? 'block' : 'none';
-            });
-        });
-    }
-    
-    // Q7 OTel status change
-    const q7Radios = document.querySelectorAll('input[name="q7"]');
-    q7Radios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            const otelStatuses = [getText('q7_o1'), getText('q7_o2')];
-            isOtelUser = otelStatuses.includes(radio.value);
-            updateOtelVisibility();
-        });
-    });
-    
-    // Q20 "Other" handling
-    const q20Checkboxes = document.querySelectorAll('input[name="q20"]');
-    const q20Other = document.getElementById('q20Other');
-    if (q20Other) {
-        q20Checkboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                const otherChecked = [...q20Checkboxes].some(c => c.value === getText('q20_o8') && c.checked);
-                q20Other.style.display = otherChecked ? 'block' : 'none';
-            });
-        });
-    }
-    
-    // Sliders
-    document.querySelectorAll('input[type="range"]').forEach(slider => {
-        const valueDisplay = slider.parentElement.querySelector('.slider-value');
-        if (valueDisplay) {
-            slider.addEventListener('input', () => {
-                valueDisplay.textContent = slider.value + '%';
-            });
-        }
-    });
-    
-    // Character counters
-    document.querySelectorAll('textarea').forEach(textarea => {
-        const counter = textarea.parentElement.querySelector('.char-count .current');
-        if (counter) {
-            textarea.addEventListener('input', () => {
-                counter.textContent = textarea.value.length;
-            });
-        }
-    });
-    
-    // Drag and drop for ranking
-    initRanking();
-}
-
-function updateOtelVisibility() {
-    // Update isOtelUser from saved q7 answer
-    if (answers.q7) {
-        const otelStatuses = [getText('q7_o1'), getText('q7_o2')];
-        isOtelUser = otelStatuses.includes(answers.q7);
-    }
-    
-    // Show/hide OTel-dependent questions in section 2
-    document.querySelectorAll('.otel-enabled').forEach(el => {
-        el.style.display = isOtelUser ? 'block' : 'none';
-    });
-}
-
-function initRanking() {
-    const list = document.getElementById('rankingList');
-    if (!list) return;
-    
-    let draggedItem = null;
-    
-    list.querySelectorAll('.ranking-item').forEach(item => {
-        item.addEventListener('dragstart', () => {
-            draggedItem = item;
-            setTimeout(() => item.classList.add('dragging'), 0);
-        });
         
-        item.addEventListener('dragend', () => {
-            item.classList.remove('dragging');
-            updateRankNumbers();
-        });
+        return true;
+    }
+
+    function isVisible(element) {
+        if (!element) return false;
+        const style = window.getComputedStyle(element);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
         
-        item.addEventListener('dragover', e => {
-            e.preventDefault();
-            const afterElement = getDragAfterElement(list, e.clientY);
-            if (afterElement) {
-                list.insertBefore(draggedItem, afterElement);
+        const parent = element.parentElement;
+        if (parent) return isVisible(parent);
+        
+        return true;
+    }
+
+    function highlightInvalid(element) {
+        if (!element) return;
+        element.classList.add('invalid');
+        setTimeout(() => element.classList.remove('invalid'), 3000);
+    }
+
+    function showValidationMessage(element) {
+        document.querySelectorAll('.validation-message').forEach(el => el.remove());
+        
+        const message = document.createElement('div');
+        message.className = 'validation-message';
+        message.textContent = currentLang === 'pl' ? 'To pole jest wymagane' : 'This field is required';
+        
+        const question = element.closest('.question');
+        if (question) {
+            question.appendChild(message);
+            setTimeout(() => message.remove(), 3000);
+        }
+    }
+
+    // ==========================================
+    // Ranking (Drag & Drop)
+    // ==========================================
+    function setupRanking() {
+        const container = document.getElementById('rankingContainer');
+        if (!container) return;
+
+        const items = container.querySelectorAll('.ranking-item');
+        let draggedItem = null;
+
+        items.forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedItem = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                items.forEach(i => i.classList.remove('drag-over'));
+                updateRankingPositions();
+            });
+
+            item.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                if (this !== draggedItem) {
+                    this.classList.add('drag-over');
+                }
+            });
+
+            item.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+
+            item.addEventListener('drop', function(e) {
+                e.preventDefault();
+                if (this !== draggedItem) {
+                    const allItems = [...container.querySelectorAll('.ranking-item')];
+                    const fromIndex = allItems.indexOf(draggedItem);
+                    const toIndex = allItems.indexOf(this);
+
+                    if (fromIndex < toIndex) {
+                        container.insertBefore(draggedItem, this.nextSibling);
+                    } else {
+                        container.insertBefore(draggedItem, this);
+                    }
+                }
+                this.classList.remove('drag-over');
+            });
+
+            item.addEventListener('touchstart', handleTouchStart, { passive: true });
+            item.addEventListener('touchmove', handleTouchMove, { passive: false });
+            item.addEventListener('touchend', handleTouchEnd);
+        });
+
+        updateRankingPositions();
+    }
+
+    function updateRankingPositions() {
+        const container = document.getElementById('rankingContainer');
+        const items = container.querySelectorAll('.ranking-item');
+        const ranking = [];
+
+        items.forEach((item, index) => {
+            const position = item.querySelector('.ranking-position');
+            position.textContent = index + 1;
+            ranking.push(item.dataset.value);
+        });
+
+        const rankingInput = document.getElementById('q18RankingInput');
+        if (rankingInput) {
+            rankingInput.value = ranking.join(',');
+        }
+    }
+
+    let touchStartY = 0;
+    let touchCurrentItem = null;
+
+    function handleTouchStart(e) {
+        touchCurrentItem = this;
+        touchStartY = e.touches[0].clientY;
+        this.classList.add('dragging');
+    }
+
+    function handleTouchMove(e) {
+        if (!touchCurrentItem) return;
+        e.preventDefault();
+        
+        const touch = e.touches[0];
+        const container = document.getElementById('rankingContainer');
+        const items = [...container.querySelectorAll('.ranking-item')];
+        
+        items.forEach(item => {
+            if (item === touchCurrentItem) return;
+            const rect = item.getBoundingClientRect();
+            if (touch.clientY > rect.top && touch.clientY < rect.bottom) {
+                item.classList.add('drag-over');
             } else {
-                list.appendChild(draggedItem);
+                item.classList.remove('drag-over');
             }
         });
-    });
-    
-    function getDragAfterElement(container, y) {
-        const elements = [...container.querySelectorAll('.ranking-item:not(.dragging)')];
-        return elements.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return { offset, element: child };
-            }
-            return closest;
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
-    
-    function updateRankNumbers() {
-        list.querySelectorAll('.ranking-item').forEach((item, i) => {
-            item.querySelector('.rank-number').textContent = i + 1;
-        });
-    }
-}
 
-// ========== SUBMISSION ==========
-async function submitSurvey() {
-    if (!validateCurrentSection()) return;
-    saveCurrentAnswers();
-    
-    // Get ranking order
-    const rankingList = document.getElementById('rankingList');
-    if (rankingList) {
-        answers.q19 = [...rankingList.querySelectorAll('.ranking-item')]
-            .map(item => item.dataset.value);
-    }
-    
-    const submitBtn = document.querySelector('.btn-submit');
-    submitBtn.disabled = true;
-    submitBtn.textContent = '...';
-    
-    try {
-        const response = await fetch(`${API_URL}/submit`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                token: validatedToken,
-                language: currentLang,
-                isOtelUser,
-                isAmateur,
-                responses: answers,
-                submittedAt: new Date().toISOString()
-            })
-        });
+    function handleTouchEnd(e) {
+        if (!touchCurrentItem) return;
         
-        const data = await response.json();
+        const container = document.getElementById('rankingContainer');
+        const overItem = container.querySelector('.ranking-item.drag-over');
         
-        if (data.success) {
-            showThankYou();
-        } else {
-            throw new Error(data.error || 'Submission failed');
+        if (overItem && overItem !== touchCurrentItem) {
+            const items = [...container.querySelectorAll('.ranking-item')];
+            const fromIndex = items.indexOf(touchCurrentItem);
+            const toIndex = items.indexOf(overItem);
+
+            if (fromIndex < toIndex) {
+                container.insertBefore(touchCurrentItem, overItem.nextSibling);
+            } else {
+                container.insertBefore(touchCurrentItem, overItem);
+            }
         }
-    } catch (err) {
-        console.error('Submit error:', err);
-        alert(getText('errSubmit'));
-        submitBtn.disabled = false;
-        submitBtn.textContent = getText('submitBtn');
-    }
-}
 
-function showThankYou() {
-    document.getElementById('surveyContainer').innerHTML = `
-        <div class="thank-you">
-            <div class="thank-icon">✓</div>
-            <h2>${getText('thankTitle')}</h2>
-            <p>${getText('thankMsg')}</p>
-        </div>
+        touchCurrentItem.classList.remove('dragging');
+        container.querySelectorAll('.ranking-item').forEach(i => i.classList.remove('drag-over'));
+        updateRankingPositions();
+        touchCurrentItem = null;
+    }
+
+    // ==========================================
+    // Character Counters
+    // ==========================================
+    function setupCharCounters() {
+        setupCharCounter('q22_adoption_conditions', 'q22CharCount');
+        setupCharCounter('q32_biggest_benefit', 'q32CharCount');
+        setupCharCounter('q33_biggest_challenge', 'q33CharCount');
+        setupCharCounter('q34_comments', 'q34CharCount');
+    }
+
+    function setupCharCounter(textareaName, counterId) {
+        const textarea = document.querySelector(`textarea[name="${textareaName}"]`);
+        const counter = document.getElementById(counterId);
+        
+        if (textarea && counter) {
+            textarea.addEventListener('input', function() {
+                counter.textContent = this.value.length;
+            });
+        }
+    }
+
+    // ==========================================
+    // Checkbox Limits
+    // ==========================================
+    function setupCheckboxLimits() {
+        const limitedGroups = document.querySelectorAll('.checkbox-grid[data-max]');
+        
+        limitedGroups.forEach(group => {
+            const max = parseInt(group.dataset.max);
+            const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const checked = group.querySelectorAll('input[type="checkbox"]:checked');
+                    if (checked.length > max) {
+                        this.checked = false;
+                        showLimitMessage(group, max);
+                    }
+                });
+            });
+        });
+    }
+
+    function showLimitMessage(group, max) {
+        group.querySelectorAll('.limit-message').forEach(el => el.remove());
+        
+        const message = document.createElement('div');
+        message.className = 'limit-message';
+        message.textContent = currentLang === 'pl' 
+            ? `Możesz wybrać maksymalnie ${max} opcje`
+            : `You can select maximum ${max} options`;
+        message.style.cssText = `
+            color: #f59e0b;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #fef3c7;
+            border-radius: 6px;
+        `;
+        
+        group.appendChild(message);
+        setTimeout(() => message.remove(), 2000);
+    }
+
+    // ==========================================
+    // Form Submission
+    // ==========================================
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if (!validateCurrentSection()) {
+            return;
+        }
+
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = currentLang === 'pl' 
+            ? '<span class="token-loading"></span> Wysyłanie...'
+            : '<span class="token-loading"></span> Submitting...';
+
+        // Collect form data
+        const formData = new FormData(form);
+        const data = {};
+        
+        formData.forEach((value, key) => {
+            if (data[key]) {
+                if (Array.isArray(data[key])) {
+                    data[key].push(value);
+                } else {
+                    data[key] = [data[key], value];
+                }
+            } else {
+                data[key] = value;
+            }
+        });
+
+        // Add metadata
+        data._metadata = {
+            completionTime: calculateCompletionTime(),
+            timestamp: new Date().toISOString(),
+            respondentType: classifyRespondent(data.q1_experience),
+            otelStatus: state.otelStatus,
+            language: currentLang
+        };
+
+        // Submit to Cloudflare Worker
+        try {
+            const response = await fetch(`${CONFIG.WORKER_URL}/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: state.token,
+                    responses: data
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showThankYou(data);
+            } else {
+                throw new Error(result.error || 'Submission failed');
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            
+            // Save to localStorage as backup
+            saveToLocalStorage(data);
+            
+            // Show error but still show thank you (data is saved locally)
+            alert(currentLang === 'pl'
+                ? 'Wystąpił problem z wysłaniem odpowiedzi. Twoje dane zostały zapisane lokalnie. Skontaktuj się z administratorem ankiety.'
+                : 'There was a problem submitting your response. Your data has been saved locally. Please contact the survey administrator.');
+            showThankYou(data);
+        }
+    }
+
+    function calculateCompletionTime() {
+        const endTime = new Date();
+        const diffMs = endTime - state.startTime;
+        const diffMins = Math.round(diffMs / 60000);
+        const diffSecs = Math.round((diffMs % 60000) / 1000);
+        return `${diffMins}:${diffSecs.toString().padStart(2, '0')}`;
+    }
+
+    function classifyRespondent(experience) {
+        const amateurValues = ['less_than_6m', '6m_1y', '1_2y'];
+        return amateurValues.includes(experience) ? 'amateur' : 'specialist';
+    }
+
+    function saveToLocalStorage(data) {
+        try {
+            const responses = JSON.parse(localStorage.getItem('survey_responses') || '[]');
+            responses.push({
+                ...data,
+                _backup: true,
+                _token: state.token
+            });
+            localStorage.setItem('survey_responses', JSON.stringify(responses));
+        } catch (e) {
+            console.error('Failed to save to localStorage:', e);
+        }
+    }
+
+    function showThankYou(data) {
+        form.style.display = 'none';
+        thankYouScreen.style.display = 'block';
+
+        document.getElementById('completionTime').textContent = data._metadata.completionTime;
+        
+        const answeredCount = Object.keys(data).filter(key => 
+            !key.startsWith('_') && data[key] && data[key] !== ''
+        ).length;
+        document.getElementById('answeredQuestions').textContent = answeredCount;
+
+        document.querySelector('.progress-container').style.display = 'none';
+
+        // Translate thank you screen
+        const thankYouTitle = document.querySelector('#thankYouScreen h2');
+        const thankYouText = document.querySelector('#thankYouScreen p');
+        if (thankYouTitle) {
+            thankYouTitle.textContent = currentLang === 'pl' ? 'Dziękujemy!' : 'Thank you!';
+        }
+        if (thankYouText) {
+            thankYouText.innerHTML = currentLang === 'pl'
+                ? 'Twoje odpowiedzi zostały zapisane.<br>Dziękujemy za udział w badaniu!'
+                : 'Your responses have been saved.<br>Thank you for participating in the study!';
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // CSS for validation (add dynamically)
+    // ==========================================
+    const validationStyles = document.createElement('style');
+    validationStyles.textContent = `
+        .invalid {
+            animation: shake 0.5s ease;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
     `;
-    document.getElementById('progressBar').style.display = 'none';
-}
+    document.head.appendChild(validationStyles);
+});
