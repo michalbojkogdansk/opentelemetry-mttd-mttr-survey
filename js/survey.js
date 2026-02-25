@@ -49,8 +49,8 @@ function translatePage() {
     if (submitBtn && !submitBtn.disabled) submitBtn.textContent = currentLang === 'pl' ? 'Wyślij odpowiedzi' : 'Submit answers';
     if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = currentLang === 'pl' ? 'Weryfikuj' : 'Verify';
     
-    // Update progress text
-    updateProgress();
+    // Update progress text (guard: function defined inside DOMContentLoaded)
+    if (typeof updateProgress === 'function') updateProgress();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -890,22 +890,5 @@ document.addEventListener('DOMContentLoaded', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ==========================================
-    // CSS for validation (add dynamically)
-    // ==========================================
-    const validationStyles = document.createElement('style');
-    validationStyles.textContent = `
-        .invalid {
-            animation: shake 0.5s ease;
-            border-color: #ef4444 !important;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
-        }
-    `;
-    document.head.appendChild(validationStyles);
+    // (validation CSS .invalid and @keyframes shake moved to styles.css)
 });
