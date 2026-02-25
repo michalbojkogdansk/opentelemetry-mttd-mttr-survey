@@ -34,6 +34,11 @@
     line-height: 1.4;
 }
 
+.lang-subtitle {
+    font-weight: 400;
+    font-size: 0.85em;
+}
+
 .lang-buttons {
     display: flex;
     gap: 1rem;
