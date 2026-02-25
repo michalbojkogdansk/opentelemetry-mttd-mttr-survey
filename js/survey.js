@@ -54,6 +54,15 @@ function translatePage() {
     if (submitBtn && !submitBtn.disabled) submitBtn.textContent = getText('Wyślij odpowiedzi');
     if (validateTokenBtn && !validateTokenBtn.disabled) validateTokenBtn.textContent = getText('Weryfikuj');
 
+    // Translate char-count labels ("znaków" / "characters")
+    document.querySelectorAll('p.char-count').forEach(p => {
+        Array.from(p.childNodes).forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                node.textContent = node.textContent.replace(/znaków|characters/, getText('znaków'));
+            }
+        });
+    });
+
     // Update progress text (guard: function defined inside DOMContentLoaded)
     if (typeof updateProgress === 'function') updateProgress();
 }
