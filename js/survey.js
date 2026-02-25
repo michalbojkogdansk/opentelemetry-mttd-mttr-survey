@@ -54,34 +54,6 @@ function translatePage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Language selection handling
-    let currentLanguage = 'pl';
-    const languageScreen = document.getElementById('languageScreen');
-    const tokenScreen = document.getElementById('tokenScreen');
-    
-    // Show language screen first, hide others
-    if (languageScreen) {
-        languageScreen.style.display = 'flex';
-        if (tokenScreen) tokenScreen.style.display = 'none';
-    }
-    
-    // Language button handlers
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            currentLanguage = this.dataset.lang;
-            document.documentElement.lang = currentLanguage;
-            
-            // Hide language screen, show token screen
-            if (languageScreen) languageScreen.style.display = 'none';
-            if (tokenScreen) tokenScreen.style.display = 'flex';
-            
-            // Apply translations
-            if (typeof applyTranslations === 'function') {
-                applyTranslations(currentLanguage);
-            }
-        });
-    });
-
     // ==========================================
     // Language Selection
     // ==========================================
