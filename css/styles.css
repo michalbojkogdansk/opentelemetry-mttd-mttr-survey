@@ -41,6 +41,19 @@
     display: none;
 }
 
+/* Validation error state (previously injected dynamically — moved here for CSP compliance) */
+.invalid {
+    animation: shake 0.5s ease;
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
 .validation-message {
     color: #ef4444;
     font-size: 0.85rem;
