@@ -142,6 +142,14 @@ const translations = {
         "pl": "Sektor publiczny / Edukacja",
         "en": "Public sector / Education"
     },
+    "Administrator systemów": {
+        "pl": "Administrator systemów",
+        "en": "Systems Administrator"
+    },
+    "Team Lead / Manager techniczny": {
+        "pl": "Team Lead / Manager techniczny",
+        "en": "Team Lead / Technical Manager"
+    },
     "Inna": {
         "pl": "Inna",
         "en": "Other"
@@ -879,5 +887,6 @@ const translations = {
     "czas wypełnienia": { "pl": "czas wypełnienia", "en": "completion time" },
     "odpowiedzi": { "pl": "odpowiedzi", "en": "answers" },
     "Jeśli podałeś/aś adres e-mail, otrzymasz podsumowanie wyników po zakończeniu badania.": { "pl": "Jeśli podałeś/aś adres e-mail, otrzymasz podsumowanie wyników po zakończeniu badania.", "en": "If you provided an email address, you will receive a summary of results after the study is complete." },
-    "Badanie naukowe | 2026": { "pl": "Badanie naukowe | 2026", "en": "Research study | 2026" }
+    "Badanie naukowe | 2026": { "pl": "Badanie naukowe | 2026", "en": "Research study | 2026" },
+    "privacy-note": { "pl": "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", "en": "🔒 The survey is anonymous. Data is used exclusively for research purposes." }
 };
