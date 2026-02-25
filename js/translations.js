@@ -888,5 +888,6 @@ const translations = {
     "odpowiedzi": { "pl": "odpowiedzi", "en": "answers" },
     "Jeśli podałeś/aś adres e-mail, otrzymasz podsumowanie wyników po zakończeniu badania.": { "pl": "Jeśli podałeś/aś adres e-mail, otrzymasz podsumowanie wyników po zakończeniu badania.", "en": "If you provided an email address, you will receive a summary of results after the study is complete." },
     "Badanie naukowe | 2026": { "pl": "Badanie naukowe | 2026", "en": "Research study | 2026" },
-    "privacy-note": { "pl": "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", "en": "🔒 The survey is anonymous. Data is used exclusively for research purposes." }
+    "privacy-note": { "pl": "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", "en": "🔒 The survey is anonymous. Data is used exclusively for research purposes." },
+    "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.": { "pl": "🔒 Ankieta jest anonimowa. Dane są wykorzystywane wyłącznie do celów naukowych.", "en": "🔒 The survey is anonymous. Data is used exclusively for research purposes." }
 };
