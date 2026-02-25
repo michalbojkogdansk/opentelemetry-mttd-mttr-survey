@@ -32,15 +32,15 @@
     <div id="tokenScreen" class="token-screen hidden">
         <div class="token-container">
             <div class="token-icon">🔐</div>
-            <h2>Weryfikacja dostępu</h2>
-            <p>Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.</p>
+            <h2 data-t="Weryfikacja dostępu">Weryfikacja dostępu</h2>
+            <p data-t="Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.">Ta ankieta wymaga zaproszenia. Wprowadź otrzymany token lub użyj linku z zaproszenia.</p>
             <div class="token-input-group">
                 <input type="text" id="tokenInput" placeholder="Wprowadź token (np. AUGP-2026-XXXXXX)" autocomplete="off" maxlength="20" pattern="[A-Za-z0-9\-]+" spellcheck="false">
-                <button type="button" id="validateTokenBtn">Weryfikuj</button>
+                <button type="button" id="validateTokenBtn" data-t="Weryfikuj">Weryfikuj</button>
             </div>
             <div id="tokenError" class="token-error"></div>
             <div class="token-help">
-                <p>Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.</p>
+                <p data-t="Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.">Nie masz tokenu? Skontaktuj się z osobą, która wysłała Ci zaproszenie.</p>
             </div>
         </div>
     </div>
@@ -53,9 +53,9 @@
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                 </svg>
             </div>
-            <h1>Badanie: Wpływ OpenTelemetry na MTTD i MTTR</h1>
-            <p class="subtitle">MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)</p>
-            <p class="subtitle">Badanie naukowe | Czas wypełnienia: ~6-8 min</p>
+            <h1 data-t="Badanie: Wpływ OpenTelemetry na MTTD i MTTR">Badanie: Wpływ OpenTelemetry na MTTD i MTTR</h1>
+            <p class="subtitle" data-t="MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)">MTTD = Mean Time To Detect (średni czas wykrycia incydentu) | MTTR = Mean Time To Recovery (średni czas przywrócenia usługi)</p>
+            <p class="subtitle" data-t="Badanie naukowe | Czas wypełnienia: ~6-8 min">Badanie naukowe | Czas wypełnienia: ~6-8 min</p>
         </header>
 
         <!-- Progress Bar -->
@@ -73,7 +73,7 @@
             <section class="survey-section active" data-section="1">
                 <div class="section-header">
                     <span class="section-number">I</span>
-                    <h2>Informacje demograficzne</h2>
+                    <h2 data-t="Informacje demograficzne">Informacje demograficzne</h2>
                 </div>
 
                 <!-- Pytanie 1 -->
@@ -88,42 +88,42 @@
                             <input type="radio" name="q1_experience" value="less_than_6m" required>
                             <span class="option-content">
                                 <span class="option-icon">🌱</span>
-                                <span class="option-text">Mniej niż 6 miesięcy</span>
+                                <span class="option-text" data-t="Mniej niż 6 miesięcy">Mniej niż 6 miesięcy</span>
                             </span>
                         </label>
                         <label class="option-card">
                             <input type="radio" name="q1_experience" value="6m_1y">
                             <span class="option-content">
                                 <span class="option-icon">📚</span>
-                                <span class="option-text">6 miesięcy – 1 rok</span>
+                                <span class="option-text" data-t="6 miesięcy – 1 rok">6 miesięcy – 1 rok</span>
                             </span>
                         </label>
                         <label class="option-card">
                             <input type="radio" name="q1_experience" value="1_2y">
                             <span class="option-content">
                                 <span class="option-icon">💼</span>
-                                <span class="option-text">1–2 lata</span>
+                                <span class="option-text" data-t="1–2 lata">1–2 lata</span>
                             </span>
                         </label>
                         <label class="option-card">
                             <input type="radio" name="q1_experience" value="3_5y">
                             <span class="option-content">
                                 <span class="option-icon">⭐</span>
-                                <span class="option-text">3–5 lat</span>
+                                <span class="option-text" data-t="3–5 lat">3–5 lat</span>
                             </span>
                         </label>
                         <label class="option-card">
                             <input type="radio" name="q1_experience" value="6_10y">
                             <span class="option-content">
                                 <span class="option-icon">🏆</span>
-                                <span class="option-text">6–10 lat</span>
+                                <span class="option-text" data-t="6–10 lat">6–10 lat</span>
                             </span>
                         </label>
                         <label class="option-card">
                             <input type="radio" name="q1_experience" value="more_than_10y">
                             <span class="option-content">
                                 <span class="option-icon">👑</span>
-                                <span class="option-text">Ponad 10 lat</span>
+                                <span class="option-text" data-t="Ponad 10 lat">Ponad 10 lat</span>
                             </span>
                         </label>
                     </div>
@@ -138,7 +138,7 @@
                     </label>
                     <div class="select-wrapper">
                         <select name="q2_role" required>
-                            <option value="">-- Wybierz rolę --</option>
+                            <option value="" data-t="-- Wybierz rolę --">-- Wybierz rolę --</option>
                             <option value="devops">DevOps Engineer</option>
                             <option value="sre">Site Reliability Engineer (SRE)</option>
                             <option value="platform">Platform Engineer</option>
@@ -147,7 +147,7 @@
                             <option value="cloud">Cloud Engineer / Architect</option>
                             <option value="admin">Administrator systemów</option>
                             <option value="lead">Team Lead / Manager techniczny</option>
-                            <option value="other">Inna</option>
+                            <option value="other" data-t="Inna">Inna</option>
                         </select>
                     </div>
                     <div class="conditional-field hidden" id="q2_other_container">
@@ -164,16 +164,16 @@
                     </label>
                     <div class="select-wrapper">
                         <select name="q3_industry" required>
-                            <option value="">-- Wybierz branżę --</option>
-                            <option value="finance">Finanse i bankowość</option>
-                            <option value="ecommerce">E-commerce / Retail</option>
-                            <option value="tech">Technologie / Software house</option>
-                            <option value="telecom">Telekomunikacja</option>
-                            <option value="media">Media i rozrywka</option>
-                            <option value="healthcare">Ochrona zdrowia</option>
-                            <option value="manufacturing">Produkcja / Przemysł</option>
-                            <option value="public">Sektor publiczny / Edukacja</option>
-                            <option value="other">Inna</option>
+                            <option value="" data-t="-- Wybierz branżę --">-- Wybierz branżę --</option>
+                            <option value="finance" data-t="Finanse i bankowość">Finanse i bankowość</option>
+                            <option value="ecommerce" data-t="E-commerce / Retail">E-commerce / Retail</option>
+                            <option value="tech" data-t="Technologie / Software house">Technologie / Software house</option>
+                            <option value="telecom" data-t="Telekomunikacja">Telekomunikacja</option>
+                            <option value="media" data-t="Media i rozrywka">Media i rozrywka</option>
+                            <option value="healthcare" data-t="Ochrona zdrowia">Ochrona zdrowia</option>
+                            <option value="manufacturing" data-t="Produkcja / Przemysł">Produkcja / Przemysł</option>
+                            <option value="public" data-t="Sektor publiczny / Edukacja">Sektor publiczny / Edukacja</option>
+                            <option value="other" data-t="Inna">Inna</option>
                         </select>
                     </div>
                     <div class="conditional-field hidden" id="q3_other_container">
@@ -191,23 +191,23 @@
                     <div class="options-list">
                         <label class="option-item">
                             <input type="radio" name="q4_org_size" value="micro" required>
-                            <span>1–10 (mikroprzedsiębiorstwo)</span>
+                            <span data-t="1–10 (mikroprzedsiębiorstwo)">1–10 (mikroprzedsiębiorstwo)</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q4_org_size" value="small">
-                            <span>11–50 (małe)</span>
+                            <span data-t="11–50 (małe)">11–50 (małe)</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q4_org_size" value="medium">
-                            <span>51–250 (średnie)</span>
+                            <span data-t="51–250 (średnie)">51–250 (średnie)</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q4_org_size" value="large">
-                            <span>251–1000 (duże)</span>
+                            <span data-t="251–1000 (duże)">251–1000 (duże)</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q4_org_size" value="enterprise">
-                            <span>Ponad 1000 (korporacja)</span>
+                            <span data-t="Ponad 1000 (korporacja)">Ponad 1000 (korporacja)</span>
                         </label>
                     </div>
                 </div>
@@ -238,11 +238,11 @@
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q5_microservices" value="100+">
-                            <span>Ponad 100</span>
+                            <span data-t="Ponad 100">Ponad 100</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q5_microservices" value="unknown">
-                            <span>Nie wiem / Nie dotyczy</span>
+                            <span data-t="Nie wiem / Nie dotyczy">Nie wiem / Nie dotyczy</span>
                         </label>
                     </div>
                 </div>
@@ -252,7 +252,7 @@
             <section class="survey-section" data-section="2">
                 <div class="section-header">
                     <span class="section-number">II</span>
-                    <h2>Obecne praktyki monitoringu</h2>
+                    <h2 data-t="Obecne praktyki monitoringu">Obecne praktyki monitoringu</h2>
                 </div>
 
                 <!-- Pytanie 6 -->
@@ -260,7 +260,7 @@
                     <label class="question-label">
                         <span class="question-number">6.</span>
                         Jakich narzędzi do observability używasz w swojej pracy?
-                        <span class="hint">(możesz wybrać wiele)</span>
+                        <span class="hint" data-t="(możesz wybrać wiele)">(możesz wybrać wiele)</span>
                         <span class="required">*</span>
                     </label>
                     <div class="checkbox-grid">
@@ -347,12 +347,12 @@
                         <label class="checkbox-item">
                             <input type="checkbox" name="q6_tools" value="other">
                             <span class="checkbox-custom"></span>
-                            <span>Inne</span>
+                            <span data-t="Inne">Inne</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q6_tools" value="none">
                             <span class="checkbox-custom"></span>
-                            <span>Nie używam żadnych</span>
+                            <span data-t="Nie używam żadnych">Nie używam żadnych</span>
                         </label>
                     </div>
                     <div class="conditional-field hidden" id="q6_other_container">
@@ -365,33 +365,33 @@
                     <label class="question-label">
                         <span class="question-number">7.</span>
                         Czy w Twojej organizacji wdrożono OpenTelemetry (OTel)?
-                        <span class="hint">(przez wdrożenie rozumiemy użycie SDK, Collectora lub auto-instrumentacji OTel w co najmniej jednym środowisku)</span>
+                        <span class="hint" data-t="(przez wdrożenie rozumiemy użycie SDK, Collectora lub auto-instrumentacji OTel w co najmniej jednym środowisku)">(przez wdrożenie rozumiemy użycie SDK, Collectora lub auto-instrumentacji OTel w co najmniej jednym środowisku)</span>
                         <span class="required">*</span>
                     </label>
                     <div class="options-list otel-status">
                         <label class="option-item highlight-yes">
                             <input type="radio" name="q7_otel_status" value="full" required>
-                            <span>✅ Tak, w pełni wdrożone w produkcji</span>
+                            <span data-t="✅ Tak, w pełni wdrożone w produkcji">✅ Tak, w pełni wdrożone w produkcji</span>
                         </label>
                         <label class="option-item highlight-yes">
                             <input type="radio" name="q7_otel_status" value="partial">
-                            <span>🔄 Tak, częściowo wdrożone (pilotaż lub wybrane systemy)</span>
+                            <span data-t="🔄 Tak, częściowo wdrożone (pilotaż lub wybrane systemy)">🔄 Tak, częściowo wdrożone (pilotaż lub wybrane systemy)</span>
                         </label>
                         <label class="option-item highlight-yes">
                             <input type="radio" name="q7_otel_status" value="in_progress">
-                            <span>🚧 W trakcie wdrażania</span>
+                            <span data-t="🚧 W trakcie wdrażania">🚧 W trakcie wdrażania</span>
                         </label>
                         <label class="option-item highlight-no">
                             <input type="radio" name="q7_otel_status" value="planned">
-                            <span>📋 Planujemy wdrożenie w ciągu 12 miesięcy</span>
+                            <span data-t="📋 Planujemy wdrożenie w ciągu 12 miesięcy">📋 Planujemy wdrożenie w ciągu 12 miesięcy</span>
                         </label>
                         <label class="option-item highlight-no">
                             <input type="radio" name="q7_otel_status" value="no">
-                            <span>❌ Nie, i nie planujemy wdrożenia</span>
+                            <span data-t="❌ Nie, i nie planujemy wdrożenia">❌ Nie, i nie planujemy wdrożenia</span>
                         </label>
                         <label class="option-item highlight-no">
                             <input type="radio" name="q7_otel_status" value="unknown">
-                            <span>❓ Nie wiem</span>
+                            <span data-t="❓ Nie wiem">❓ Nie wiem</span>
                         </label>
                     </div>
                 </div>
@@ -406,23 +406,23 @@
                     <div class="options-list">
                         <label class="option-item">
                             <input type="radio" name="q8_otel_duration" value="less_3m">
-                            <span>Mniej niż 3 miesiące</span>
+                            <span data-t="Mniej niż 3 miesiące">Mniej niż 3 miesiące</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q8_otel_duration" value="3_6m">
-                            <span>3–6 miesięcy</span>
+                            <span data-t="3–6 miesięcy">3–6 miesięcy</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q8_otel_duration" value="6_12m">
-                            <span>6–12 miesięcy</span>
+                            <span data-t="6–12 miesięcy">6–12 miesięcy</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q8_otel_duration" value="1_2y">
-                            <span>1–2 lata</span>
+                            <span data-t="1–2 lata">1–2 lata</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q8_otel_duration" value="more_2y">
-                            <span>Ponad 2 lata</span>
+                            <span data-t="Ponad 2 lata">Ponad 2 lata</span>
                         </label>
                     </div>
                 </div>
@@ -432,23 +432,23 @@
                     <label class="question-label">
                         <span class="question-number">9.</span>
                         Które komponenty OpenTelemetry są aktualnie używane?
-                        <span class="hint">(możesz wybrać wiele)</span>
+                        <span class="hint" data-t="(możesz wybrać wiele)">(możesz wybrać wiele)</span>
                     </label>
                     <div class="checkbox-grid compact">
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="traces">
                             <span class="checkbox-custom"></span>
-                            <span>Traces (śledzenie rozproszone)</span>
+                            <span data-t="Traces (śledzenie rozproszone)">Traces (śledzenie rozproszone)</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="metrics">
                             <span class="checkbox-custom"></span>
-                            <span>Metrics (metryki)</span>
+                            <span data-t="Metrics (metryki)">Metrics (metryki)</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="logs">
                             <span class="checkbox-custom"></span>
-                            <span>Logs (logi)</span>
+                            <span data-t="Logs (logi)">Logs (logi)</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="collector">
@@ -458,22 +458,22 @@
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="auto_instr">
                             <span class="checkbox-custom"></span>
-                            <span>Auto-instrumentacja (SDK)</span>
+                            <span data-t="Auto-instrumentacja (SDK)">Auto-instrumentacja (SDK)</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="manual_instr">
                             <span class="checkbox-custom"></span>
-                            <span>Manualna instrumentacja</span>
+                            <span data-t="Manualna instrumentacja">Manualna instrumentacja</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="baggage">
                             <span class="checkbox-custom"></span>
-                            <span>Baggage / Context Propagation</span>
+                            <span data-t="Baggage / Context Propagation">Baggage / Context Propagation</span>
                         </label>
                         <label class="checkbox-item">
                             <input type="checkbox" name="q9_otel_components" value="unknown">
                             <span class="checkbox-custom"></span>
-                            <span>Nie wiem</span>
+                            <span data-t="Nie wiem">Nie wiem</span>
                         </label>
                     </div>
                 </div>
@@ -483,19 +483,19 @@
             <section class="survey-section" data-section="3">
                 <div class="section-header">
                     <span class="section-number">III</span>
-                    <h2>MTTD i MTTR – samoocena</h2>
+                    <h2 data-t="MTTD i MTTR – samoocena">MTTD i MTTR – samoocena</h2>
                 </div>
 
                 <div class="info-box mttr-definition">
                     <div class="info-icon">ℹ️</div>
                     <div class="info-content">
-                        <strong>Uwaga dotycząca MTTR:</strong> Akronim MTTR ma trzy możliwe interpretacje:
+                        <strong data-t="Uwaga dotycząca MTTR:">Uwaga dotycząca MTTR:</strong> Akronim MTTR ma trzy możliwe interpretacje:
                         <ul>
-                            <li><strong>Mean Time To Repair</strong> – czas samej naprawy (bez diagnostyki)</li>
-                            <li><strong>Mean Time To Recovery</strong> – od wykrycia do pełnego przywrócenia usługi</li>
-                            <li><strong>Mean Time To Resolve</strong> – cały cykl życia incydentu (włącznie z post-mortem)</li>
+                            <li><strong data-t="Mean Time To Repair">Mean Time To Repair</strong> – czas samej naprawy (bez diagnostyki)</li>
+                            <li><strong data-t="Mean Time To Recovery">Mean Time To Recovery</strong> – od wykrycia do pełnego przywrócenia usługi</li>
+                            <li><strong data-t="Mean Time To Resolve">Mean Time To Resolve</strong> – cały cykl życia incydentu (włącznie z post-mortem)</li>
                         </ul>
-                        <strong>W tym badaniu stosujemy definicję Recovery</strong> – czyli czas od wykrycia incydentu do pełnego przywrócenia usługi do stanu operacyjnego. Ta interpretacja bezpośrednio przekłada się na czas niedostępności odczuwany przez użytkowników.
+                        <strong data-t="W tym badaniu stosujemy definicję Recovery">W tym badaniu stosujemy definicję Recovery</strong> – czyli czas od wykrycia incydentu do pełnego przywrócenia usługi do stanu operacyjnego. Ta interpretacja bezpośrednio przekłada się na czas niedostępności odczuwany przez użytkowników.
                     </div>
                 </div>
 
@@ -509,23 +509,23 @@
                     <div class="options-list">
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="automatic" required>
-                            <span>Automatycznie – system ticketowy lub narzędzie ITSM (IT Service Management, np. Jira, ServiceNow)</span>
+                            <span data-t="Automatycznie – system ticketowy lub narzędzie ITSM (IT Service Management, np. Jira, ServiceNow)">Automatycznie – system ticketowy lub narzędzie ITSM (IT Service Management, np. Jira, ServiceNow)</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="semi_auto">
-                            <span>Półautomatycznie – część danych automatycznie, część manualnie</span>
+                            <span data-t="Półautomatycznie – część danych automatycznie, część manualnie">Półautomatycznie – część danych automatycznie, część manualnie</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="manual">
-                            <span>Manualnie – dane są zapisywane ręcznie</span>
+                            <span data-t="Manualnie – dane są zapisywane ręcznie">Manualnie – dane są zapisywane ręcznie</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="none">
-                            <span>Nie zbieramy takich danych</span>
+                            <span data-t="Nie zbieramy takich danych">Nie zbieramy takich danych</span>
                         </label>
                         <label class="option-item">
                             <input type="radio" name="q10_data_collection" value="unknown">
-                            <span>Nie wiem</span>
+                            <span data-t="Nie wiem">Nie wiem</span>
                         </label>
                     </div>
                 </div>
@@ -543,11 +543,11 @@
                         <label class="question-label">
                             <span class="question-number">11.</span>
                             Jaki był średni czas detekcji incydentu (MTTD) w ciągu ostatnich 6 miesięcy?
-                            <span class="hint">Podaj wartość w minutach</span>
+                            <span class="hint" data-t="Podaj wartość w minutach">Podaj wartość w minutach</span>
                         </label>
                         <div class="number-input-wrapper">
                             <input type="number" name="q11_mttd" min="0" max="10080" placeholder="np. 15">
-                            <span class="unit">minut</span>
+                            <span class="unit" data-t="minut">minut</span>
                         </div>
                         <p class="field-help">Wartość od 0 do 10080 (maksymalnie tydzień)</p>
                     </div>
@@ -557,11 +557,11 @@
                         <label class="question-label">
                             <span class="question-number">12.</span>
                             Jaki był średni czas przywrócenia usługi (MTTR) w ciągu ostatnich 6 miesięcy?
-                            <span class="hint">Podaj wartość w minutach</span>
+                            <span class="hint" data-t="Podaj wartość w minutach">Podaj wartość w minutach</span>
                         </label>
                         <div class="number-input-wrapper">
                             <input type="number" name="q12_mttr" min="0" max="43200" placeholder="np. 60">
-                            <span class="unit">minut</span>
+                            <span class="unit" data-t="minut">minut</span>
                         </div>
                         <p class="field-help">Wartość od 0 do 43200 (maksymalnie miesiąc)</p>
                     </div>
@@ -575,15 +575,15 @@
                         <div class="options-list">
                             <label class="option-item">
                                 <input type="radio" name="q13_data_accuracy" value="accurate">
-                                <span>Dokładne – bazują na pomiarach systemowych</span>
+                                <span data-t="Dokładne – bazują na pomiarach systemowych">Dokładne – bazują na pomiarach systemowych</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q13_data_accuracy" value="estimate">
-                                <span>Orientacyjne – moja najlepsza estymacja</span>
+                                <span data-t="Orientacyjne – moja najlepsza estymacja">Orientacyjne – moja najlepsza estymacja</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q13_data_accuracy" value="unsure">
-                                <span>Nie jestem pewien/pewna</span>
+                                <span data-t="Nie jestem pewien/pewna">Nie jestem pewien/pewna</span>
                             </label>
                         </div>
                     </div>
@@ -617,11 +617,11 @@
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q14_incidents_count" value="50+">
-                                <span>Ponad 50</span>
+                                <span data-t="Ponad 50">Ponad 50</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q14_incidents_count" value="unknown">
-                                <span>Nie wiem</span>
+                                <span data-t="Nie wiem">Nie wiem</span>
                             </label>
                         </div>
                     </div>
@@ -632,12 +632,12 @@
             <section class="survey-section" data-section="4">
                 <div class="section-header">
                     <span class="section-number">IV</span>
-                    <h2>Wpływ OpenTelemetry</h2>
+                    <h2 data-t="Wpływ OpenTelemetry">Wpływ OpenTelemetry</h2>
                 </div>
 
                 <!-- CZĘŚĆ A - dla użytkowników OTel -->
                 <div class="otel-users-section hidden" id="otelUsersSection">
-                    <h3 class="subsection-title">Ocena wpływu po wdrożeniu</h3>
+                    <h3 class="subsection-title" data-t="Ocena wpływu po wdrożeniu">Ocena wpływu po wdrożeniu</h3>
 
                     <!-- Pytanie 15 -->
                     <div class="question" data-question="15">
@@ -648,8 +648,8 @@
                         </label>
                         <div class="likert-scale">
                             <div class="likert-labels">
-                                <span>Znacząco się wydłużyło</span>
-                                <span>Znacząco się skróciło</span>
+                                <span data-t="Znacząco się wydłużyło">Znacząco się wydłużyło</span>
+                                <span data-t="Znacząco się skróciło">Znacząco się skróciło</span>
                             </div>
                             <div class="likert-options">
                                 <label class="likert-option">
@@ -660,17 +660,17 @@
                                 <label class="likert-option">
                                     <input type="radio" name="q15_mttd_change" value="2">
                                     <span class="likert-value negative-light">2</span>
-                                    <span class="likert-desc">Pogorszenie 10-50%</span>
+                                    <span class="likert-desc" data-t="Pogorszenie 10-50%">Pogorszenie 10-50%</span>
                                 </label>
                                 <label class="likert-option">
                                     <input type="radio" name="q15_mttd_change" value="3">
                                     <span class="likert-value neutral">3</span>
-                                    <span class="likert-desc">Bez zmian</span>
+                                    <span class="likert-desc" data-t="Bez zmian">Bez zmian</span>
                                 </label>
                                 <label class="likert-option">
                                     <input type="radio" name="q15_mttd_change" value="4">
                                     <span class="likert-value positive-light">4</span>
-                                    <span class="likert-desc">Poprawa 10-50%</span>
+                                    <span class="likert-desc" data-t="Poprawa 10-50%">Poprawa 10-50%</span>
                                 </label>
                                 <label class="likert-option">
                                     <input type="radio" name="q15_mttd_change" value="5">
@@ -680,7 +680,7 @@
                             </div>
                             <label class="option-item na-option">
                                 <input type="radio" name="q15_mttd_change" value="na">
-                                <span>Nie jestem w stanie ocenić</span>
+                                <span data-t="Nie jestem w stanie ocenić">Nie jestem w stanie ocenić</span>
                             </label>
                         </div>
                     </div>
@@ -694,8 +694,8 @@
                         </label>
                         <div class="likert-scale">
                             <div class="likert-labels">
-                                <span>Znacząco się wydłużyło</span>
-                                <span>Znacząco się skróciło</span>
+                                <span data-t="Znacząco się wydłużyło">Znacząco się wydłużyło</span>
+                                <span data-t="Znacząco się skróciło">Znacząco się skróciło</span>
                             </div>
                             <div class="likert-options">
                                 <label class="likert-option">
@@ -706,17 +706,17 @@
                                 <label class="likert-option">
                                     <input type="radio" name="q16_mttr_change" value="2">
                                     <span class="likert-value negative-light">2</span>
-                                    <span class="likert-desc">Pogorszenie 10-50%</span>
+                                    <span class="likert-desc" data-t="Pogorszenie 10-50%">Pogorszenie 10-50%</span>
                                 </label>
                                 <label class="likert-option">
                                     <input type="radio" name="q16_mttr_change" value="3">
                                     <span class="likert-value neutral">3</span>
-                                    <span class="likert-desc">Bez zmian</span>
+                                    <span class="likert-desc" data-t="Bez zmian">Bez zmian</span>
                                 </label>
                                 <label class="likert-option">
                                     <input type="radio" name="q16_mttr_change" value="4">
                                     <span class="likert-value positive-light">4</span>
-                                    <span class="likert-desc">Poprawa 10-50%</span>
+                                    <span class="likert-desc" data-t="Poprawa 10-50%">Poprawa 10-50%</span>
                                 </label>
                                 <label class="likert-option">
                                     <input type="radio" name="q16_mttr_change" value="5">
@@ -726,7 +726,7 @@
                             </div>
                             <label class="option-item na-option">
                                 <input type="radio" name="q16_mttr_change" value="na">
-                                <span>Nie jestem w stanie ocenić</span>
+                                <span data-t="Nie jestem w stanie ocenić">Nie jestem w stanie ocenić</span>
                             </label>
                         </div>
                     </div>
@@ -740,7 +740,7 @@
                         <div class="options-list">
                             <label class="option-item">
                                 <input type="radio" name="q17_improvement_percent" value="none">
-                                <span>Brak poprawy lub pogorszenie</span>
+                                <span data-t="Brak poprawy lub pogorszenie">Brak poprawy lub pogorszenie</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q17_improvement_percent" value="1-10">
@@ -760,11 +760,11 @@
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q17_improvement_percent" value="75+">
-                                <span>Ponad 75%</span>
+                                <span data-t="Ponad 75%">Ponad 75%</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q17_improvement_percent" value="unknown">
-                                <span>Nie jestem w stanie oszacować</span>
+                                <span data-t="Nie jestem w stanie oszacować">Nie jestem w stanie oszacować</span>
                             </label>
                         </div>
                     </div>
@@ -774,33 +774,33 @@
                         <label class="question-label">
                             <span class="question-number">18.</span>
                             Które elementy OpenTelemetry miały największy wpływ na poprawę?
-                            <span class="hint">Uszereguj od 1 (największy) do 5 (najmniejszy) – przeciągnij elementy</span>
+                            <span class="hint" data-t="Uszereguj od 1 (największy) do 5 (najmniejszy) – przeciągnij elementy">Uszereguj od 1 (największy) do 5 (najmniejszy) – przeciągnij elementy</span>
                         </label>
                         <div class="ranking-container" id="rankingContainer">
                             <div class="ranking-item" draggable="true" data-value="traces">
                                 <span class="ranking-handle">☰</span>
                                 <span class="ranking-position">1</span>
-                                <span class="ranking-text">Distributed Traces (śledzenie rozproszone)</span>
+                                <span class="ranking-text" data-t="Distributed Traces (śledzenie rozproszone)">Distributed Traces (śledzenie rozproszone)</span>
                             </div>
                             <div class="ranking-item" draggable="true" data-value="metrics">
                                 <span class="ranking-handle">☰</span>
                                 <span class="ranking-position">2</span>
-                                <span class="ranking-text">Metrics (metryki)</span>
+                                <span class="ranking-text" data-t="Metrics (metryki)">Metrics (metryki)</span>
                             </div>
                             <div class="ranking-item" draggable="true" data-value="logs">
                                 <span class="ranking-handle">☰</span>
                                 <span class="ranking-position">3</span>
-                                <span class="ranking-text">Logs (logi strukturalne)</span>
+                                <span class="ranking-text" data-t="Logs (logi strukturalne)">Logs (logi strukturalne)</span>
                             </div>
                             <div class="ranking-item" draggable="true" data-value="correlation">
                                 <span class="ranking-handle">☰</span>
                                 <span class="ranking-position">4</span>
-                                <span class="ranking-text">Korelacja między traces/metrics/logs</span>
+                                <span class="ranking-text" data-t="Korelacja między traces/metrics/logs">Korelacja między traces/metrics/logs</span>
                             </div>
                             <div class="ranking-item" draggable="true" data-value="otlp">
                                 <span class="ranking-handle">☰</span>
                                 <span class="ranking-position">5</span>
-                                <span class="ranking-text">Standaryzacja eksportu danych (OTLP)</span>
+                                <span class="ranking-text" data-t="Standaryzacja eksportu danych (OTLP)">Standaryzacja eksportu danych (OTLP)</span>
                             </div>
                         </div>
                         <input type="hidden" name="q18_ranking" id="q18RankingInput">
@@ -815,27 +815,27 @@
                         <div class="options-list">
                             <label class="option-item">
                                 <input type="radio" name="q19_biggest_value" value="root_cause">
-                                <span>Szybsza identyfikacja źródła problemu (root cause analysis)</span>
+                                <span data-t="Szybsza identyfikacja źródła problemu (root cause analysis)">Szybsza identyfikacja źródła problemu (root cause analysis)</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q19_biggest_value" value="visibility">
-                                <span>Lepsza widoczność zależności między serwisami</span>
+                                <span data-t="Lepsza widoczność zależności między serwisami">Lepsza widoczność zależności między serwisami</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q19_biggest_value" value="cost_reduction">
-                                <span>Unifikacja narzędzi i redukcja kosztów</span>
+                                <span data-t="Unifikacja narzędzi i redukcja kosztów">Unifikacja narzędzi i redukcja kosztów</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q19_biggest_value" value="onboarding">
-                                <span>Łatwiejsze onboardingowanie nowych członków zespołu</span>
+                                <span data-t="Łatwiejsze onboardingowanie nowych członków zespołu">Łatwiejsze onboardingowanie nowych członków zespołu</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q19_biggest_value" value="standardization">
-                                <span>Standaryzacja praktyk observability w organizacji</span>
+                                <span data-t="Standaryzacja praktyk observability w organizacji">Standaryzacja praktyk observability w organizacji</span>
                             </label>
                             <label class="option-item">
                                 <input type="radio" name="q19_biggest_value" value="other">
-                                <span>Inna</span>
+                                <span data-t="Inna">Inna</span>
                             </label>
                         </div>
                         <div class="conditional-field hidden" id="q19_other_container">
@@ -846,61 +846,61 @@
 
                 <!-- CZĘŚĆ B - dla osób bez OTel -->
                 <div class="non-otel-users-section hidden" id="nonOtelUsersSection">
-                    <h3 class="subsection-title">Plany i przeszkody</h3>
+                    <h3 class="subsection-title" data-t="Plany i przeszkody">Plany i przeszkody</h3>
 
                     <!-- Pytanie 20 -->
                     <div class="question" data-question="20">
                         <label class="question-label">
                             <span class="question-number">20.</span>
                             Jakie są główne przeszkody we wdrożeniu OpenTelemetry?
-                            <span class="hint">(wybierz maksymalnie 3)</span>
+                            <span class="hint" data-t="(wybierz maksymalnie 3)">(wybierz maksymalnie 3)</span>
                             <span class="required">*</span>
                         </label>
                         <div class="checkbox-grid" data-max="3">
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="knowledge">
                                 <span class="checkbox-custom"></span>
-                                <span>Brak wiedzy i kompetencji w zespole</span>
+                                <span data-t="Brak wiedzy i kompetencji w zespole">Brak wiedzy i kompetencji w zespole</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="effort">
                                 <span class="checkbox-custom"></span>
-                                <span>Zbyt duży nakład pracy na wdrożenie</span>
+                                <span data-t="Zbyt duży nakład pracy na wdrożenie">Zbyt duży nakład pracy na wdrożenie</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="migration_cost">
                                 <span class="checkbox-custom"></span>
-                                <span>Koszty migracji z obecnych rozwiązań</span>
+                                <span data-t="Koszty migracji z obecnych rozwiązań">Koszty migracji z obecnych rozwiązań</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="performance">
                                 <span class="checkbox-custom"></span>
-                                <span>Obawy o wydajność i overhead</span>
+                                <span data-t="Obawy o wydajność i overhead">Obawy o wydajność i overhead</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="management">
                                 <span class="checkbox-custom"></span>
-                                <span>Brak wsparcia ze strony kierownictwa</span>
+                                <span data-t="Brak wsparcia ze strony kierownictwa">Brak wsparcia ze strony kierownictwa</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="sufficient">
                                 <span class="checkbox-custom"></span>
-                                <span>Obecne narzędzia są wystarczające</span>
+                                <span data-t="Obecne narzędzia są wystarczające">Obecne narzędzia są wystarczające</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="maturity">
                                 <span class="checkbox-custom"></span>
-                                <span>Zbyt wczesna faza rozwoju OTel</span>
+                                <span data-t="Zbyt wczesna faza rozwoju OTel">Zbyt wczesna faza rozwoju OTel</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="compatibility">
                                 <span class="checkbox-custom"></span>
-                                <span>Problemy z kompatybilnością</span>
+                                <span data-t="Problemy z kompatybilnością">Problemy z kompatybilnością</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="q20_obstacles" value="other">
                                 <span class="checkbox-custom"></span>
-                                <span>Inne</span>
+                                <span data-t="Inne">Inne</span>
                             </label>
                         </div>
                         <div class="conditional-field hidden" id="q20_other_container">
@@ -917,8 +917,8 @@
                         </label>
                         <div class="likert-scale horizontal">
                             <div class="likert-labels">
-                                <span>Zdecydowanie nie</span>
-                                <span>Zdecydowanie tak</span>
+                                <span data-t="Zdecydowanie nie">Zdecydowanie nie</span>
+                                <span data-t="Zdecydowanie tak">Zdecydowanie tak</span>
                             </div>
                             <div class="likert-options">
                                 <label class="likert-option">
@@ -961,10 +961,10 @@
             <section class="survey-section" data-section="5" id="otelUsabilitySection">
                 <div class="section-header">
                     <span class="section-number">V</span>
-                    <h2>Ocena użyteczności elementów OpenTelemetry</h2>
+                    <h2 data-t="Ocena użyteczności elementów OpenTelemetry">Ocena użyteczności elementów OpenTelemetry</h2>
                 </div>
 
-                <p class="section-intro">Oceń jak przydatne są poszczególne elementy OpenTelemetry w procesie diagnozowania incydentów.</p>
+                <p class="section-intro" data-t="Oceń jak przydatne są poszczególne elementy OpenTelemetry w procesie diagnozowania incydentów.">Oceń jak przydatne są poszczególne elementy OpenTelemetry w procesie diagnozowania incydentów.</p>
 
                 <!-- Pytanie 23 -->
                 <div class="question" data-question="23">
@@ -977,7 +977,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q23_traces_usefulness" value="1">
                                 <span class="likert-value">1</span>
-                                <span class="likert-label">Bezużyteczne</span>
+                                <span class="likert-label" data-t="Bezużyteczne">Bezużyteczne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q23_traces_usefulness" value="2">
@@ -986,7 +986,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q23_traces_usefulness" value="3">
                                 <span class="likert-value">3</span>
-                                <span class="likert-label">Neutralne</span>
+                                <span class="likert-label" data-t="Neutralne">Neutralne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q23_traces_usefulness" value="4">
@@ -995,7 +995,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q23_traces_usefulness" value="5">
                                 <span class="likert-value">5</span>
-                                <span class="likert-label">Bardzo użyteczne</span>
+                                <span class="likert-label" data-t="Bardzo użyteczne">Bardzo użyteczne</span>
                             </label>
                             <label class="likert-option na">
                                 <input type="radio" name="q23_traces_usefulness" value="na">
@@ -1016,7 +1016,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q24_metrics_usefulness" value="1">
                                 <span class="likert-value">1</span>
-                                <span class="likert-label">Bezużyteczne</span>
+                                <span class="likert-label" data-t="Bezużyteczne">Bezużyteczne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q24_metrics_usefulness" value="2">
@@ -1025,7 +1025,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q24_metrics_usefulness" value="3">
                                 <span class="likert-value">3</span>
-                                <span class="likert-label">Neutralne</span>
+                                <span class="likert-label" data-t="Neutralne">Neutralne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q24_metrics_usefulness" value="4">
@@ -1034,7 +1034,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q24_metrics_usefulness" value="5">
                                 <span class="likert-value">5</span>
-                                <span class="likert-label">Bardzo użyteczne</span>
+                                <span class="likert-label" data-t="Bardzo użyteczne">Bardzo użyteczne</span>
                             </label>
                             <label class="likert-option na">
                                 <input type="radio" name="q24_metrics_usefulness" value="na">
@@ -1055,7 +1055,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q25_logs_usefulness" value="1">
                                 <span class="likert-value">1</span>
-                                <span class="likert-label">Bezużyteczne</span>
+                                <span class="likert-label" data-t="Bezużyteczne">Bezużyteczne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q25_logs_usefulness" value="2">
@@ -1064,7 +1064,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q25_logs_usefulness" value="3">
                                 <span class="likert-value">3</span>
-                                <span class="likert-label">Neutralne</span>
+                                <span class="likert-label" data-t="Neutralne">Neutralne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q25_logs_usefulness" value="4">
@@ -1073,7 +1073,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q25_logs_usefulness" value="5">
                                 <span class="likert-value">5</span>
-                                <span class="likert-label">Bardzo użyteczne</span>
+                                <span class="likert-label" data-t="Bardzo użyteczne">Bardzo użyteczne</span>
                             </label>
                             <label class="likert-option na">
                                 <input type="radio" name="q25_logs_usefulness" value="na">
@@ -1094,7 +1094,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q26_correlation_usefulness" value="1">
                                 <span class="likert-value">1</span>
-                                <span class="likert-label">Bezużyteczne</span>
+                                <span class="likert-label" data-t="Bezużyteczne">Bezużyteczne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q26_correlation_usefulness" value="2">
@@ -1103,7 +1103,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q26_correlation_usefulness" value="3">
                                 <span class="likert-value">3</span>
-                                <span class="likert-label">Neutralne</span>
+                                <span class="likert-label" data-t="Neutralne">Neutralne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q26_correlation_usefulness" value="4">
@@ -1112,7 +1112,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q26_correlation_usefulness" value="5">
                                 <span class="likert-value">5</span>
-                                <span class="likert-label">Bardzo użyteczne</span>
+                                <span class="likert-label" data-t="Bardzo użyteczne">Bardzo użyteczne</span>
                             </label>
                             <label class="likert-option na">
                                 <input type="radio" name="q26_correlation_usefulness" value="na">
@@ -1133,7 +1133,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q27_otlp_usefulness" value="1">
                                 <span class="likert-value">1</span>
-                                <span class="likert-label">Bezużyteczne</span>
+                                <span class="likert-label" data-t="Bezużyteczne">Bezużyteczne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q27_otlp_usefulness" value="2">
@@ -1142,7 +1142,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q27_otlp_usefulness" value="3">
                                 <span class="likert-value">3</span>
-                                <span class="likert-label">Neutralne</span>
+                                <span class="likert-label" data-t="Neutralne">Neutralne</span>
                             </label>
                             <label class="likert-option">
                                 <input type="radio" name="q27_otlp_usefulness" value="4">
@@ -1151,7 +1151,7 @@
                             <label class="likert-option">
                                 <input type="radio" name="q27_otlp_usefulness" value="5">
                                 <span class="likert-value">5</span>
-                                <span class="likert-label">Bardzo użyteczne</span>
+                                <span class="likert-label" data-t="Bardzo użyteczne">Bardzo użyteczne</span>
                             </label>
                             <label class="likert-option na">
                                 <input type="radio" name="q27_otlp_usefulness" value="na">
@@ -1166,7 +1166,7 @@
             <section class="survey-section" data-section="6">
                 <div class="section-header">
                     <span class="section-number">VI</span>
-                    <h2>Wiedza i satysfakcja</h2>
+                    <h2 data-t="Wiedza i satysfakcja">Wiedza i satysfakcja</h2>
                 </div>
 
                 <!-- Pytanie 28 -->
@@ -1174,13 +1174,13 @@
                     <label class="question-label">
                         <span class="question-number">28.</span>
                         Jak oceniasz swoją pewność w diagnozowaniu incydentów PRZED wdrożeniem OpenTelemetry?
-                        <span class="hint">(lub przy obecnych narzędziach, jeśli nie używasz OTel)</span>
+                        <span class="hint" data-t="(lub przy obecnych narzędziach, jeśli nie używasz OTel)">(lub przy obecnych narzędziach, jeśli nie używasz OTel)</span>
                         <span class="required">*</span>
                     </label>
                     <div class="likert-scale horizontal">
                         <div class="likert-labels">
-                            <span>Bardzo niska</span>
-                            <span>Bardzo wysoka</span>
+                            <span data-t="Bardzo niska">Bardzo niska</span>
+                            <span data-t="Bardzo wysoka">Bardzo wysoka</span>
                         </div>
                         <div class="likert-options">
                             <label class="likert-option">
@@ -1216,8 +1216,8 @@
                     </label>
                     <div class="likert-scale horizontal">
                         <div class="likert-labels">
-                            <span>Bardzo niska</span>
-                            <span>Bardzo wysoka</span>
+                            <span data-t="Bardzo niska">Bardzo niska</span>
+                            <span data-t="Bardzo wysoka">Bardzo wysoka</span>
                         </div>
                         <div class="likert-options">
                             <label class="likert-option">
@@ -1253,8 +1253,8 @@
                     </label>
                     <div class="likert-scale horizontal">
                         <div class="likert-labels">
-                            <span>Bardzo niezadowolony/a</span>
-                            <span>Bardzo zadowolony/a</span>
+                            <span data-t="Bardzo niezadowolony/a">Bardzo niezadowolony/a</span>
+                            <span data-t="Bardzo zadowolony/a">Bardzo zadowolony/a</span>
                         </div>
                         <div class="likert-options">
                             <label class="likert-option">
@@ -1292,7 +1292,7 @@
                         <label class="maturity-option">
                             <input type="radio" name="q31_maturity" value="1" required>
                             <span class="maturity-level">1</span>
-                            <span class="maturity-title">Początkowa</span>
+                            <span class="maturity-title" data-t="Początkowa">Początkowa</span>
                             <span class="maturity-desc">Brak formalnych procesów</span>
                         </label>
                         <label class="maturity-option">
@@ -1310,7 +1310,7 @@
                         <label class="maturity-option">
                             <input type="radio" name="q31_maturity" value="4">
                             <span class="maturity-level">4</span>
-                            <span class="maturity-title">Zaawansowana</span>
+                            <span class="maturity-title" data-t="Zaawansowana">Zaawansowana</span>
                             <span class="maturity-desc">Pełna automatyzacja, proaktywność</span>
                         </label>
                         <label class="maturity-option">
@@ -1327,7 +1327,7 @@
             <section class="survey-section" data-section="7">
                 <div class="section-header">
                     <span class="section-number">VII</span>
-                    <h2>Pytania otwarte</h2>
+                    <h2 data-t="Pytania otwarte">Pytania otwarte</h2>
                 </div>
 
                 <p class="section-intro">Twoje szczegółowe odpowiedzi są bardzo cenne dla badania. Opisz swoje doświadczenia własnymi słowami.</p>
