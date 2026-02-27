@@ -106,14 +106,43 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function showTokenScreen() {
         if (langScreen) langScreen.style.display = 'none';
-        if (tokenScreen) tokenScreen.style.display = 'flex';
         translatePage();
-        
-        // If token in URL, auto-validate
+
+        // Priority 1: token in URL (manual/QR cards)
         const urlToken = urlParams.get('token');
         if (urlToken) {
+            if (tokenScreen) tokenScreen.style.display = 'flex';
             tokenInput.value = urlToken;
             validateToken(urlToken);
+            return;
+        }
+
+        // Priority 2: previously auto-assigned token in localStorage
+        const savedAutoToken = localStorage.getItem('survey_auto_token');
+        if (savedAutoToken) {
+            validateToken(savedAutoToken);
+            return;
+        }
+
+        // Priority 3: request new auto-token from Worker
+        autoAssignToken();
+    }
+
+    async function autoAssignToken() {
+        try {
+            const response = await fetch(`${CONFIG.WORKER_URL}/assign`);
+            const data = await response.json();
+            if (data.token) {
+                localStorage.setItem('survey_auto_token', data.token);
+                validateToken(data.token);
+            } else {
+                // Fallback: show manual token screen
+                if (tokenScreen) tokenScreen.style.display = 'flex';
+            }
+        } catch (error) {
+            console.error('Auto-assign error:', error);
+            // Fallback: show manual token screen
+            if (tokenScreen) tokenScreen.style.display = 'flex';
         }
     }
     
@@ -256,6 +285,8 @@ document.addEventListener('DOMContentLoaded', function() {
         init();
         
         // Clean URL (remove token parameter)
+        // Clear auto-assigned token from localStorage (will be marked used on submit)
+        // Keep it for now — cleared after successful submission
         if (window.history.replaceState) {
             const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             window.history.replaceState({}, document.title, cleanUrl);
@@ -877,6 +908,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showThankYou(data) {
+        // Clear auto-token from localStorage — survey submitted, token is now used
+        localStorage.removeItem('survey_auto_token');
         form.style.display = 'none';
         thankYouScreen.style.display = 'block';
 
